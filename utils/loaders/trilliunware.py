@@ -1,103 +1,148 @@
 import pandas as pd
-from utils.helper import bersihkan_harga
 from utils.helper import bersihkan_harga, bersihkan_text
 
 
 def load_trilliunware(df):
-
     hasil = []
+
+    type_list = [
+        "EUREKA",
+        "EMERALD",
+        "CAPRI",
+        "CARRIBEAN",
+        "MARION",
+        "RUBY",
+        "SAPPHIRA",
+        "OPAL",
+        "JASPER",
+        "HARVEST",
+        "ANDALUZITE",
+        "CHRYSOLITE",
+        "RHODOLITE",
+        "SODALITE",
+        "SPENE",
+        "MALACHITE",
+        "GARNET",
+        "COBALT",
+        "LILAC",
+        "KROOZ",
+        "PYRITE",
+        "JUNIPER",
+        "CITRINE",
+        "PERIDOT",
+    ]
 
     for _, row in df.iterrows():
 
-        kategori = str(row.iloc[0]).upper().strip()
-        produk = str(row.iloc[1]).upper().strip()
+        kategori = bersihkan_text(row.iloc[0])
+        produk = bersihkan_text(row.iloc[1])
 
-        warna_muda = row.iloc[2]
-        warna_tua = row.iloc[3]
-
-        produk_text = bersihkan_text(produk)
-        kategori_text = bersihkan_text(kategori)
+        harga_muda = bersihkan_harga(row.iloc[2])
+        harga_tua = bersihkan_harga(row.iloc[3])
 
         # ==========================
         # JENIS
         # ==========================
-
         jenis = ""
 
-        if "CD" in produk_text:
+        if "CD" in produk:
             jenis = "CLOSET DUDUK"
 
-        elif "CJ" in produk_text:
+        elif "CJ" in produk:
             jenis = "CLOSET JONGKOK"
 
-        elif kategori_text == "WASTAFEL":
+        elif kategori == "WASTAFEL":
             jenis = "WASTAFEL"
 
-        elif kategori_text == "URINAL":
+        elif kategori == "URINAL":
             jenis = "URINAL"
 
-        elif kategori_text == "SOAP DISH":
+        elif kategori == "SOAP DISH":
             jenis = "SOAP DISH"
-
-        elif kategori_text == "AVENA":
-            jenis = "AVENA"
 
         # ==========================
         # TYPE
         # ==========================
-
         type_produk = ""
 
-        for t in [
-            "EUREKA",
-            "EMERALD",
-            "CAPRI",
-            "CARRIBEAN",
-            "MARION",
-            "RUBY",
-            "SAPPHIRA",
-            "OPAL",
-            "JASPER",
-            "HARVEST",
-            "ANDALUZITE",
-            "CHRYSOLITE",
-            "RHODOLITE",
-            "SODALITE",
-            "SPENE",
-            "MALACHITE",
-            "GARNET",
-            "COBALT",
-            "LILAC",
-            "KROOZ",
-            "PYRITE",
-            "JUNIPER",
-        ]:
-            if t in produk_text:
+        for t in type_list:
+            if t in produk:
                 type_produk = t
                 break
 
-        # hasil.append(
-        #     {
-        #         "Brand": "TRILLIUNWARE",
-        #         "Kategori": bersihkan_text(kategori),
-        #         "Produk": bersihkan_text(produk),
-        #         "Jenis": "",
-        #         "Type": "",
-        #         "Harga Muda": bersihkan_harga(warna_muda),
-        #         "Harga Tua": bersihkan_harga(warna_tua),
-        #     }
-        # )
+        # ==========================
+        # VARIAN
+        # ==========================
+        varian = ""
 
+        # if "SET (TANPA KRAN)" in produk:
+        if "SET" in produk and "TANPA KRAN" in produk:
+            varian = "SET TANPA KRAN"
+
+        elif "BODY ONLY" in produk:
+            varian = "BODY ONLY"
+
+        elif "KAKI ONLY" in produk:
+            varian = "KAKI ONLY"
+
+        # elif "SET DGN KRAN" in produk:
+        elif "SET" in produk and ("DGN KRAN" in produk or "DENGAN KRAN" in produk):
+            varian = "SET DGN KRAN"
+
+        elif "BASIN TAP" in produk:
+            varian = "BASIN TAP"
+
+        if type_produk == "MALACHITE":
+
+            if "GARNET" in produk:
+                varian = "GARNET"
+
+            elif "LILAC" in produk:
+                varian = "LILAC"
+
+            if "BODY ONLY" in produk:
+                varian += " BODY ONLY"
+
+            elif "KAKI ONLY" in produk:
+                varian += " KAKI ONLY"
+
+            elif "SET (TANPA KRAN)" in produk:
+                varian += " SET TANPA KRAN"
+
+        # ==========================
+        # WARNA
+        # ==========================
+        warna = ""
+
+        if "BLACK" in produk:
+            warna = "BLACK"
+
+        elif "GREY" in produk:
+            warna = "GREY"
+
+        # ==========================
+        # SIMPAN
+        # ==========================
+        if not produk:
+            continue
         hasil.append(
             {
                 "Brand": "TRILLIUNWARE",
-                "Kategori": kategori_text,
-                "Produk": produk_text,
+                "Kategori": kategori,
+                "Produk": produk,
                 "Jenis": jenis,
                 "Type": type_produk,
-                "Harga Muda": bersihkan_harga(warna_muda),
-                "Harga Tua": bersihkan_harga(warna_tua),
+                "Varian": varian,
+                "Warna": warna,
+                "Harga Muda": harga_muda,
+                "Harga Tua": harga_tua,
             }
         )
 
-    return pd.DataFrame(hasil)
+    # return pd.DataFrame(hasil)
+    df = pd.DataFrame(hasil)
+
+    print(df[df["Type"] == "GARNET"].to_string())
+
+    return df
+

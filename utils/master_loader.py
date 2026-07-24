@@ -9,6 +9,8 @@ from utils.loaders.unnu import load_unnu
 from utils.loaders.trilliunware import load_trilliunware
 from utils.loaders.fitting_basic import load_fitting_basic
 from utils.loaders.pureflo_fitting import load_pureflo_fitting
+from utils.loaders.pintu import load_pintu
+
 
 def load_master(file):
 
@@ -89,7 +91,7 @@ def load_master(file):
         # master["fitting_basic"] = load_fitting_basic(df)
         master["fitting_basic"] = load_fitting_basic(df)
 
-        print(master["fitting_basic"].to_string())
+        # print(master["fitting_basic"].to_string())
 
     # # =========================
     # # FITTING PUREFLO
@@ -100,12 +102,15 @@ def load_master(file):
 
         master["pureflo_fitting"] = load_pureflo_fitting(df)
 
-        print(
-            master["pureflo_fitting"][
-                master["pureflo_fitting"]["Jenis"].str.contains("CAP", na=False)
-            ].to_string()
-        )
+    # =========================
+    # PINTU
+    # =========================
+    if "PINTU" in excel.sheet_names:
 
-        print(master["pureflo_fitting"].to_string())
+        df = pd.read_excel(excel, sheet_name="PINTU", header=None)
+
+        master["pintu"] = load_pintu(df)
+
+        print(master["pintu"].to_string())
 
     return master

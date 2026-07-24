@@ -1,74 +1,3 @@
-# import re
-
-
-# def parse_trilliunware(text):
-
-#     text = str(text).upper().strip()
-
-
-#     warna_list = [
-#         "BRILLIANT WHITE",
-#         "WHITE",
-#         "IVORY",
-#         "BLACK",
-#         "GREY",
-#         "MAROON",
-#         "LIGHT BLUE",
-#         "SORRENTO BLUE",
-#         "APPLE GREEN",
-#         "PINK",
-#     ]
-
-
-#     warna = ""
-
-#     for w in warna_list:
-#         if w in text:
-#             warna = w
-#             break
-
-
-#     # ==========================
-#     # PRODUK
-#     # ==========================
-
-#     produk = ""
-
-
-#     if "CLOSET DUDUK" in text and "EUREKA" in text:
-
-#         produk = "CD SIRAM EUREKA + SEAT COVER (SET)"
-
-
-#     else:
-
-#         produk = (
-#             text
-#             .replace("TRILLIUNWARE", "")
-#             .replace("(SET)", "")
-#             .strip()
-#         )
-
-
-#     return {
-
-#         "brand": "TRILLIUNWARE",
-
-#         "jenis": "",
-
-#         "type": "",
-
-#         "kode": "",
-
-#         "ukuran": "",
-
-#         "warna": warna,
-
-#         "produk": produk,
-
-#     }
-
-
 def parse_trilliunware(text):
 
     text = str(text).upper().strip()
@@ -77,12 +6,25 @@ def parse_trilliunware(text):
         "brand": "TRILLIUNWARE",
         "jenis": "",
         "type": "",
+        "varian": "",
         "kode": "",
         "ukuran": "",
         "warna": "",
         "produk": "",
     }
 
+    # ======================
+    # VARIAN
+    # ======================
+
+    if "MALACHITE" in text:
+
+        if "GARNET" in text:
+            result["varian"] = "GARNET"
+
+        elif "LILAC" in text:
+            result["varian"] = "LILAC"
+            
     # ======================
     # JENIS
     # ======================
@@ -107,38 +49,30 @@ def parse_trilliunware(text):
     # ======================
 
     type_list = [
-        "EUREKA",
-        "EMERALD",
-        "CAPRI",
-        "CARRIBEAN",
-        "MARION",
-        "RUBY",
-        "SAPPHIRA",
-        "OPAL",
-        "JASPER",
-        "HARVEST",
-        "ANDALUZITE",
-        "CHRYSOLITE",
-        "RHODOLITE",
-        "SODALITE",
-        "SPENE",
-        "MALACHITE",
-        "GARNET",
-        "COBALT",
-        "LILAC",
-        "KROOZ",
-        "PYRITE",
-        "JUNIPER",
-        "TOURMALINE",
-        "VISCARIA",
-        "VELVET",
-        "PARTISI",
+        "EUREKA", "EMERALD", "CAPRI", "CARRIBEAN", "MARION",
+        "RUBY", "SAPPHIRA", "OPAL", "JASPER", "HARVEST",
+        "ANDALUZITE", "CHRYSOLITE", "RHODOLITE", "SODALITE",
+        "SPENE", "MALACHITE", "GARNET", "COBALT", "LILAC",
+        "KROOZ", "PYRITE", "JUNIPER", "TOURMALINE", "VISCARIA",
+        "VELVET", "PARTISI", "CITRINE", "PERIDOT",
     ]
-
+    
     for t in type_list:
         if t in text:
             result["type"] = t
             break
+
+    # ======================
+    # VARIAN
+    # ======================
+
+    if result["type"] == "MALACHITE":
+
+        if "GARNET" in text:
+            result["varian"] = "GARNET"
+
+        elif "LILAC" in text:
+            result["varian"] = "LILAC"
 
     # ======================
     # WARNA

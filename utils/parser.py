@@ -7,6 +7,7 @@ from utils.parsers.unnu_parser import parse_unnu
 from utils.parsers.trilliunware_parser import parse_trilliunware
 from utils.parsers.fitting_basic_parser import parse_fitting_basic
 from utils.parsers.pureflo_fitting_parser import pureflo_fitting_parser
+from utils.parsers.pintu_parser import pintu_parser
 
 
 def parse_product(product_name):
@@ -118,6 +119,26 @@ def parse_product(product_name):
         for keyword in pureflo_keyword:
             if keyword in text:
                 return pureflo_fitting_parser(text)
+
+    # =========================
+    # PINTU
+    # =========================
+
+    pintu_keyword = [
+        "PINTU PVC",
+        "PINTU PANEL",
+        "PINTU MINIMALIS",
+        "PINTU OVAL",
+        "PINTU KACA",
+        "RUVVO",
+        "METRO",
+        "UPVC",
+        "ALUMUNIUM",
+    ]
+
+    for keyword in pintu_keyword:
+        if keyword in text:
+            return pintu_parser(text)
 
     # =========================
     # BESTLON

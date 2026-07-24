@@ -22,12 +22,15 @@ def parse_penguin(text):
     
     elif "PENGUIN OTO LEVEL (NL)" in text:
         result["jenis"] = "SET KIT TOREN"
-
+    
     elif "SLIM TANK" in text:
         result["jenis"] = "SLIM TANK"
 
+    elif "UNDERGROUND KIT" in text:
+        result["jenis"] = "SET KIT TOREN"
+
     elif "UNDERGROUND" in text:
-        result["jenis"] = "UNDERGROUND TANK"
+        result["jenis"] = "TANGKI"
 
     elif "DOSING" in text:
         result["jenis"] = "DOSING TANK"
@@ -78,6 +81,9 @@ def parse_penguin(text):
 
     elif "KUNING" in text:
         result["warna"] = "KUNING"
+
+    elif "HITAM" in text:
+        result["warna"] = "HITAM"
 
     else:
         result["warna"] = "STANDAR"

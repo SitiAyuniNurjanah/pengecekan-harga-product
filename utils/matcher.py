@@ -1,6 +1,7 @@
 import pandas as pd
 
-from utils.helper import bersihkan_harga
+# from utils.helper import bersihkan_harga
+from utils.helper import bersihkan_text, bersihkan_harga, normalisasi_pintu, warna_cocok
 
 
 def bersihkan_text(text):
@@ -33,11 +34,27 @@ def match_product(df_order, master):
     df_unnu = master.get("unnu", pd.DataFrame())
     df_trilliunware = master.get("trilliunware", pd.DataFrame())
     df_fitting_basic = master.get("fitting_basic", pd.DataFrame())
-    # df_pureflo_fitting = master.get("pureflo_fitting", pd.DataFrame())
     df_pureflo_fitting = master.get(
         "pureflo_fitting",
         pd.DataFrame(columns=["Brand", "Jenis", "Type", "Ukuran", "Harga"]),
     )
+    # df_pintu = master.get("pintu", pd.DataFrame())
+    df_pintu = master.get(
+        "pintu",
+        pd.DataFrame(
+            columns=[
+                "Brand",
+                "Jenis",
+                "Type",
+                "Kode",
+                "Ukuran",
+                "Warna",
+                "Produk",
+                "Harga",
+            ]
+        ),
+    )
+
     hasil = df_order.copy()
 
     hasil["Harga Utama"] = None
@@ -89,52 +106,6 @@ def match_product(df_order, master):
                 )
             ]
 
-        # # =========================
-        # # PRODUK UNNU
-        # # =========================
-        # elif row["Brand"] == "UNNU":
-
-        #     if str(row["Ukuran"]).strip() != "":
-
-        #         master_match = df_unnu[
-        #             (
-        #                 df_unnu["Type"].apply(bersihkan_text)
-        #                 == bersihkan_text(row["Type"])
-        #             )
-        #             & (
-        #                 df_unnu["Ukuran"].apply(bersihkan_text)
-        #                 == bersihkan_text(row["Ukuran"])
-        #             )
-        #         ]
-
-        #     else:
-
-        #         master_match = df_unnu[
-        #             df_unnu["Type"].apply(bersihkan_text) == bersihkan_text(row["Type"])
-        #         ]
-
-        #         # Kalau produk tidak punya warna (misal PVC Valve)
-        #         if len(master_match) == 0:
-
-        #             master_match = df_unnu[
-        #                 (
-        #                     df_unnu["Type"].apply(bersihkan_text)
-        #                     == bersihkan_text(row["Type"])
-        #                 )
-
-        #                 & (
-        #                     df_unnu["Ukuran"].apply(bersihkan_text)
-        #                     == bersihkan_text(row["Ukuran"])
-        #                 )
-        #             ]
-
-        #         else:
-
-        #             master_match = df_unnu[
-        #                 df_unnu["Type"].apply(bersihkan_text)
-        #                 == bersihkan_text(row["Type"])
-        #             ]
-
         # =========================
         # PRODUK UNNU
         # =========================
@@ -176,171 +147,437 @@ def match_product(df_order, master):
 
             nama = bersihkan_text(row["Nama Barang"])
 
-            # default supaya tidak error
-            master_match = pd.DataFrame()
+            master_match = df_trilliunware.copy()
             harga_master = None
 
-            # =========================
-            # EUREKA
-            # =========================
+            # ===================================
+            # FILTER TYPE
+            # ===================================
+
+            type_row = bersihkan_text(row["Type"])
+
+            if type_row:
+                master_match = master_match[
+                    master_match["Type"].apply(bersihkan_text) == type_row
+                ]
+
+            # ===================================
+            # FILTER JENIS
+            # ===================================
+
+            jenis_row = bersihkan_text(row["Jenis"])
+
+            if jenis_row:
+                master_match = master_match[
+                    master_match["Jenis"].apply(bersihkan_text) == jenis_row
+                ]
+
+            # ===================================
+            # KHUSUS EUREKA
+            # ===================================
 
             if "EUREKA" in nama:
 
-                master_match = df_trilliunware[
-                    df_trilliunware["Produk"]
+                master_match = master_match[
+                    master_match["Produk"]
                     .apply(bersihkan_text)
-                    .str.contains("CD SIRAM EUREKA", na=False)
+                    .str.contains("EUREKA", na=False)
                 ]
 
-            # =========================
-            # MALACHITE
-            # =========================
+            # ===================================
+            # KHUSUS MALACHITE
+            # ===================================
 
-            elif "MALACHITE" in nama:
+            if "MALACHITE" in nama:
 
                 if "LILAC" in nama:
 
-                    master_match = df_trilliunware[
-                        df_trilliunware["Produk"]
+                    master_match = master_match[
+                        master_match["Produk"]
                         .apply(bersihkan_text)
-                        .str.contains("MALACHITE - LILAC", na=False)
+                        .str.contains("MALACHITE - LILAC", na=False, regex=False)
                     ]
 
                 elif "GARNET" in nama:
 
-                    master_match = df_trilliunware[
-                        df_trilliunware["Produk"]
+                    master_match = master_match[
+                        master_match["Produk"]
                         .apply(bersihkan_text)
-                        .str.contains("MALACHITE - GARNET", na=False)
+                        .str.contains("MALACHITE - GARNET", na=False, regex=False)
                     ]
 
-            # =========================
-            # KROOZ
-            # =========================
+            # ===================================
+            # BODY / SET
+            # ===================================
 
-            elif "KROOZ" in nama:
+            if "BODY" in nama:
 
-                master_match = df_trilliunware[
-                    df_trilliunware["Produk"]
-                    .apply(bersihkan_text)
-                    .str.contains("KROOZ", na=False)
-                ]
+                # White / Ivory
+                if "BLACK" not in nama and "GREY" not in nama:
 
-            # =========================
-            # GARNET
-            # =========================
-
-            elif "GARNET" in nama:
-
-                master_match = df_trilliunware[
-                    df_trilliunware["Produk"]
-                    .apply(bersihkan_text)
-                    .str.contains("GARNET", na=False)
-                ]
-
-            # =========================
-            # COBALT
-            # =========================
-
-            elif "COBALT" in nama:
-
-                master_match = df_trilliunware[
-                    df_trilliunware["Produk"]
-                    .apply(bersihkan_text)
-                    .str.contains("COBALT", na=False)
-                ]
-
-            # =========================
-            # LILAC
-            # =========================
-
-            elif "LILAC" in nama:
-
-                master_match = df_trilliunware[
-                    df_trilliunware["Produk"]
-                    .apply(bersihkan_text)
-                    .str.contains("LILAC", na=False)
-                ]
-
-            # =========================
-            # MARION
-            # =========================
-
-            elif "MARION" in nama:
-
-                if "SINGLE FLUSH" in nama:
-
-                    master_match = df_trilliunware[
-                        df_trilliunware["Produk"]
+                    master_match = master_match[
+                        master_match["Produk"]
                         .apply(bersihkan_text)
-                        .str.contains("MARION", na=False)
-                        & df_trilliunware["Produk"]
-                        .apply(bersihkan_text)
-                        .str.contains("SINGLE FLUSH", na=False)
+                        .str.contains("BODY ONLY", na=False, regex=False)
                     ]
 
-                else:
+            elif "SET" in nama:
 
-                    master_match = df_trilliunware[
-                        df_trilliunware["Produk"]
+                if "TANPA KRAN" in nama:
+
+                    master_match = master_match[
+                        master_match["Produk"]
                         .apply(bersihkan_text)
-                        .str.contains("MARION", na=False)
+                        .str.contains("SET (TANPA KRAN)", na=False, regex=False)
                     ]
 
-            # =========================
-            # SAPPHIRA
-            # =========================
+                elif "BLACK" in nama or "GREY" in nama:
 
-            elif "SAPPHIRA" in nama:
+                    master_match = master_match[
+                        master_match["Produk"]
+                        .apply(bersihkan_text)
+                        .str.contains("SET DGN KRAN", na=False, regex=False)
+                    ]
 
-                master_match = df_trilliunware[
-                    df_trilliunware["Produk"]
+            # ===================================
+            # KAKI ONLY
+            # ===================================
+
+            if "KAKI ONLY" in nama:
+
+                master_match = master_match[
+                    master_match["Produk"]
                     .apply(bersihkan_text)
-                    .str.contains("SAPPHIRA", na=False)
+                    .str.contains("KAKI ONLY", na=False, regex=False)
                 ]
 
-            # =========================
-            # EMERALD / CAPRI / CARRIBEAN
-            # =========================
+            # ===================================
+            # SINGLE FLUSH
+            # ===================================
 
-            elif "EMERALD" in nama or "CAPRI" in nama or "CARRIBEAN" in nama:
+            if "SINGLE FLUSH" in nama:
 
-                keyword = ""
-
-                if "EMERALD" in nama:
-                    keyword = "EMERALD"
-
-                elif "CAPRI" in nama:
-                    keyword = "CAPRI"
-
-                elif "CARRIBEAN" in nama:
-                    keyword = "CARRIBEAN"
-
-                master_match = df_trilliunware[
-                    df_trilliunware["Produk"]
+                master_match = master_match[
+                    master_match["Produk"]
                     .apply(bersihkan_text)
-                    .str.contains(keyword, na=False)
+                    .str.contains("SINGLE FLUSH", na=False, regex=False)
                 ]
 
-            # =========================
-            # AMBIL HARGA BERDASARKAN WARNA
-            # =========================
+            # ===================================
+            # INSERT / VESSEL
+            # ===================================
 
-            if len(master_match) > 0:
+            if "INSERT" in nama:
+
+                master_match = master_match[
+                    master_match["Produk"]
+                    .apply(bersihkan_text)
+                    .str.contains("INSERT", na=False, regex=False)
+                ]
+
+            elif "VESSEL" in nama:
+
+                master_match = master_match[
+                    master_match["Produk"]
+                    .apply(bersihkan_text)
+                    .str.contains("VESSEL", na=False, regex=False)
+                ]
+
+            # ===================================
+            # WARNA
+            # ===================================
+
+            if "BLACK" in nama:
+
+                master_match = master_match[
+                    master_match["Produk"]
+                    .apply(bersihkan_text)
+                    .str.contains("BLACK", na=False, regex=False)
+                ]
+
+            elif "GREY" in nama:
+
+                master_match = master_match[
+                    master_match["Produk"]
+                    .apply(bersihkan_text)
+                    .str.contains("GREY", na=False, regex=False)
+                ]
+
+            elif "MAROON" in nama:
+
+                master_match = master_match[
+                    master_match["Produk"]
+                    .apply(bersihkan_text)
+                    .str.contains("MAROON", na=False, regex=False)
+                ]
+
+            # ===================================
+            # DEBUG
+            # ===================================
+
+            # print("=" * 80)
+            # print(nama)
+
+            # if not master_match.empty:
+            #     print(
+            #         master_match[
+            #             ["Produk", "Jenis", "Type", "Warna", "Harga Muda"]
+            #         ].to_string()
+            #     )
+            # else:
+            #     print("MASTER TIDAK DITEMUKAN")
+
+            # ===================================
+            # AMBIL HARGA
+            # ===================================
+
+            if not master_match.empty:
 
                 master_row = master_match.iloc[0]
 
                 warna = bersihkan_text(row["Warna"])
 
-                warna_muda = ["WHITE", "BRILLIANT WHITE", "IVORY", "LIGHT BLUE", "PINK"]
-
-                if warna in warna_muda:
-
+                if warna == "MAROON":
+                    harga_master = master_row["Harga Tua"]
+                else:
                     harga_master = master_row["Harga Muda"]
+
+                hasil.at[index, "Harga Utama"] = harga_master
+        # =========================
+        # PINTU
+        # =========================
+        elif row["Brand"] == "PINTU":
+
+            master_match = df_pintu.copy()
+
+            jenis_input = bersihkan_text(row["Jenis"])
+            warna_input = bersihkan_text(row["Warna"])
+
+            # =====================
+            # FILTER JENIS
+            # =====================
+
+            if jenis_input:
+
+                master_match = master_match[
+                    master_match["Jenis"]
+                    .fillna("")
+                    .apply(bersihkan_text)
+                    .str.contains(jenis_input, na=False)
+                ]
+
+            # =====================
+            # CEK HASIL JENIS
+            # =====================
+
+            if master_match.empty:
+
+                row["Harga Utama"] = None
+                row["Status"] = "TIDAK DITEMUKAN"
+
+            else:
+
+                # =====================
+                # FILTER WARNA
+                # =====================
+
+                master_match = master_match[
+                    master_match.apply(
+                        lambda x: warna_cocok(
+                            warna_input, x.get("Produk", ""), x.get("Warna", ""), x.get("Jenis", "")
+                        ),
+                        axis=1,
+                    )
+                ]
+
+                # =====================
+                # HASIL AKHIR
+                # =====================
+
+                # if not master_match.empty:
+
+                #     row["Harga Utama"] = master_match.iloc[0]["Harga"]
+                #     row["Status"] = "COCOK"
+                if not master_match.empty:
+
+                    row["Harga Utama"] = master_match.iloc[0]["Harga"]
 
                 else:
 
-                    harga_master = master_row["Harga Tua"]
+                    row["Harga Utama"] = None
+                    row["Status"] = "TIDAK DITEMUKAN"
+
+        # # =================
+        # # PINTU
+        # # =================
+        # elif row["Brand"] == "PINTU":
+
+        #     master_match = df_pintu.copy()
+        # # Normalisasi nama input:
+        # # ALUMUNIUM -> ALUMINIUM, SAPELLI -> SAPELI
+        # nama = normalisasi_pintu(nama)
+
+        # # Helper supaya kolom Produk selalu dinormalisasi sebelum dicocokkan
+        # def filter_produk(kata):
+        #     return master_match[
+        #         master_match["Produk"]
+        #         .apply(normalisasi_pintu)
+        #         .str.contains(kata, na=False)
+        #     ]
+
+        # # =====================
+        # # PVC POLOS
+        # # =====================
+
+        # if "PVC POLOS" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("PVC POLOS", na=False)
+        #     ]
+
+        #     if "URAT KAYU" in nama:
+        #         master_match = master_match[
+        #             master_match["Produk"]
+        #             .apply(bersihkan_text)
+        #             .str.contains("URAT KAYU", na=False)
+        #         ]
+
+        # # =====================
+        # # PVC OVAL
+        # # =====================
+
+        # elif "PVC OVAL" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("PVC OVAL", na=False)
+        #     ]
+
+        # # =====================
+        # # MINIMALIS
+        # # =====================
+
+        # elif "MINIMALIS" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("MINIMALIS", na=False)
+        #     ]
+
+        # # =====================
+        # # PANEL BINGKAI
+        # # =====================
+
+        # elif "PANEL BINGKAI" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("PANEL BINGKAI", na=False)
+        #     ]
+
+        # # =====================
+        # # PANEL SPARTA
+        # # =====================
+
+        # elif "SPARTA" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("SPARTA", na=False)
+        #     ]
+
+        # # =====================
+        # # PANEL ORION
+        # # =====================
+
+        # elif "ORION" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("ORION", na=False)
+        #     ]
+
+        # # =====================
+        # # KACA PERSEGI
+        # # =====================
+
+        # elif "KACA PERSEGI" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("KACA PERSEGI", na=False)
+        #     ]
+
+        # # =====================
+        # # RUVVO ALUMUNIUM
+        # # =====================
+
+        # # elif "RUVVO" in nama and "ALUMUNIUM" in nama:
+        # elif "RUVVO" in nama and "ALUMINIUM" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("RUVVO", na=False)
+        #         & master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("ALUMUNIUM", na=False)
+        #     ]
+
+        # # =====================
+        # # RUVVO UPVC
+        # # =====================
+
+        # elif "RUVVO" in nama and "UPVC" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("RUVVO", na=False)
+        #         & master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("UPVC", na=False)
+        #     ]
+
+        # # =====================
+        # # METRO ALUMUNIUM
+        # # =====================
+
+        # # elif "METRO" in nama and "ALUMUNIUM" in nama:
+        # elif "METRO" in nama and "ALUMINIUM" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("METRO", na=False)
+        #         & master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("ALUMUNIUM", na=False)
+        #     ]
+
+        # # =====================
+        # # METRO UPVC
+        # # =====================
+
+        # elif "METRO" in nama and "UPVC" in nama:
+
+        #     master_match = master_match[
+        #         master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("METRO", na=False)
+        #         & master_match["Produk"]
+        #         .apply(bersihkan_text)
+        #         .str.contains("UPVC", na=False)
+        #     ]
+
         # =========================
         # PRODUK TRILLIUN
         # =========================
@@ -354,17 +591,6 @@ def match_product(df_order, master):
             # =========================
             if "PUREFLO" in nama_barang:
 
-                print("\n=== CEK PUREFLO ORDER ===")
-                print(row["Jenis"], row["Type"], row["Ukuran"])
-
-                print("\n=== ISI MASTER PUREFLO ===")
-                print(
-                    df_pureflo_fitting[
-                        df_pureflo_fitting["Jenis"]
-                        .apply(bersihkan_text)
-                        .str.contains("VALVE|FAUCET|REDUCER|CAP", na=False)
-                    ].to_string()
-                )
                 master_match = df_pureflo_fitting[
                     (
                         df_pureflo_fitting["Jenis"].apply(bersihkan_text)
@@ -496,16 +722,16 @@ def match_product(df_order, master):
 
                 hasil.at[index, "Harga Utama"] = harga_master
 
-                print(
-                    "CEK HARGA:",
-                    row["@Harga"],
-                    "=>",
-                    harga_pelanggan,
-                    "| MASTER:",
-                    harga_master_asli,
-                    "=>",
-                    harga_master,
-                )
+                # print(
+                #     "CEK HARGA:",
+                #     row["@Harga"],
+                #     "=>",
+                #     harga_pelanggan,
+                #     "| MASTER:",
+                #     harga_master_asli,
+                #     "=>",
+                #     harga_master,
+                # )
 
                 if harga_pelanggan == harga_master:
 
@@ -519,7 +745,7 @@ def match_product(df_order, master):
 
                 hasil.at[index, "Status"] = "FORMAT HARGA SALAH"
 
-                print("ERROR MATCH:", e)
+                # print("ERROR MATCH:", e)
 
         else:
 

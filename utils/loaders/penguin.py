@@ -42,6 +42,13 @@ def load_penguin(df):
     ok["Type"] = parsed.apply(lambda x: x["type"])
     ok["Ukuran"] = parsed.apply(lambda x: x["ukuran"])
     ok["Warna"] = parsed.apply(lambda x: x["warna"])
+    ok.loc[ok["Type"] == "TQ", "Warna"] = "HITAM"
+
+    # print(
+    #     ok[ok["Nama Barang"].astype(str).str.contains("TQ", na=False)][
+    #         ["Nama Barang", "Type", "Ukuran", "Warna"]
+    #     ]
+    # )
 
     # =========================
     # GABUNGKAN
