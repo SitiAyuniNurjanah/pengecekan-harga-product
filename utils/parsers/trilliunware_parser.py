@@ -24,7 +24,7 @@ def parse_trilliunware(text):
 
         elif "LILAC" in text:
             result["varian"] = "LILAC"
-            
+
     # ======================
     # JENIS
     # ======================
@@ -49,14 +49,37 @@ def parse_trilliunware(text):
     # ======================
 
     type_list = [
-        "EUREKA", "EMERALD", "CAPRI", "CARRIBEAN", "MARION",
-        "RUBY", "SAPPHIRA", "OPAL", "JASPER", "HARVEST",
-        "ANDALUZITE", "CHRYSOLITE", "RHODOLITE", "SODALITE",
-        "SPENE", "MALACHITE", "GARNET", "COBALT", "LILAC",
-        "KROOZ", "PYRITE", "JUNIPER", "TOURMALINE", "VISCARIA",
-        "VELVET", "PARTISI", "CITRINE", "PERIDOT",
+        "AMETHYST",
+        "ANDALUZITE",
+        "CHRYSOLITE",
+        "COBALT",
+        "CARRIBEAN",
+        "CAPRI",
+        "CITRINE",
+        "EMERALD",
+        "EUREKA",
+        "GARNET",
+        "HARVEST",
+        "JASPER",
+        "JUNIPER",
+        "KROOZ",
+        "LILAC",
+        "MALACHITE",
+        "MARION",
+        "OBSIDIAN",
+        "OPAL",
+        "PERIDOT",
+        "PYRITE",
+        "RHODOLITE",
+        "RUBY",
+        "SAPPHIRA",
+        "SODALITE",
+        "SPENE",
+        "TOURMALINE",
+        "VELVET",
+        "VISCARIA",
     ]
-    
+
     for t in type_list:
         if t in text:
             result["type"] = t

@@ -6,6 +6,7 @@ def load_trilliunware(df):
     hasil = []
 
     type_list = [
+        "AMETHYST",
         "EUREKA",
         "EMERALD",
         "CAPRI",
@@ -143,6 +144,10 @@ def load_trilliunware(df):
     df = pd.DataFrame(hasil)
 
     print(df[df["Type"] == "GARNET"].to_string())
+    print(df[df["Produk"].str.contains("AMETHYST", na=False)])
+    print(df[df["Produk"].str.contains("JASPER", na=False)])
+    print(df[df["Produk"].str.contains("OPAL", na=False)])
+    print(df[df["Produk"].str.contains("CAPRI", na=False)])
 
     return df
 
