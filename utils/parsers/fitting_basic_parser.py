@@ -18,21 +18,6 @@ def parse_fitting_basic(text):
     # JENIS FITTING
     # ==========================
 
-    # mapping = {
-    #     "FAUCET SOCKET": "FAUCET SOCKET",
-    #     "FAUCET KNEE": "FAUCET KNEE",
-    #     "FAUCET TEE": "FAUCET TEE",
-    #     "VALVE SOCKET": "VALVE SOCKET",
-    #     "WATER MUR SOCKET": "WATERMUR",
-    #     "WATER MUR VALVE SOCKET": "WATERMUR",
-    #     "LONG ELBOW": "LONG ELBOW",
-    #     "SOCKET": "SOCKET",
-    #     "KNEE": "KNEE",
-    #     "TEE": "TEE",
-    #     "PLUG": "PLUG",
-    #     "DOP": "DOP",
-    # }
-
     mapping = {
         "WATER MUR VALVE SOCKET": "WATERMUR",
         "WATER MUR SOCKET": "WATERMUR",

@@ -142,12 +142,4 @@ def load_trilliunware(df):
 
     # return pd.DataFrame(hasil)
     df = pd.DataFrame(hasil)
-
-    print(df[df["Type"] == "GARNET"].to_string())
-    print(df[df["Produk"].str.contains("AMETHYST", na=False)])
-    print(df[df["Produk"].str.contains("JASPER", na=False)])
-    print(df[df["Produk"].str.contains("OPAL", na=False)])
-    print(df[df["Produk"].str.contains("CAPRI", na=False)])
-
     return df
-

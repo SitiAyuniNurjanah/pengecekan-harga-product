@@ -1,5 +1,5 @@
 from utils.parsers.penguin_parser import parse_penguin
-from utils.parsers.trilliun_parser import parse_trilliun
+from utils.parsers.selang_trilliun_parser import parse_trilliun
 from utils.parsers.basic_putih_parser import parse_basic_putih
 from utils.parsers.basic_abu_parser import parse_basic_abu
 from utils.parsers.pipa_bestlon_parser import parse_pipa_bestlon

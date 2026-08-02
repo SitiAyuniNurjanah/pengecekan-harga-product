@@ -1,7 +1,7 @@
 import pandas as pd
 
 from utils.loaders.penguin import load_penguin
-from utils.loaders.trilliun import load_trilliun
+from utils.loaders.selang_trilliun import load_trilliun
 from utils.loaders.basic_putih import load_basic_putih
 from utils.loaders.basic_abu import load_basic_abu
 from utils.loaders.pipa_bestlon import load_pipa_bestlon
@@ -27,12 +27,18 @@ def load_master(file):
 
         master["penguin"] = load_penguin(df)
 
+
     # =========================
     # SELANG TRILLIUN
     # =========================
+
     if "SELANG TRILLIUN" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="SELANG TRILLIUN", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="SELANG TRILLIUN",
+            header=None
+        )
 
         master["trilliun"] = load_trilliun(df)
 
@@ -88,10 +94,7 @@ def load_master(file):
 
         df = pd.read_excel(excel, sheet_name="FITTING BASIC", header=None)
 
-        # master["fitting_basic"] = load_fitting_basic(df)
         master["fitting_basic"] = load_fitting_basic(df)
-
-        # print(master["fitting_basic"].to_string())
 
     # # =========================
     # # FITTING PUREFLO
@@ -110,7 +113,5 @@ def load_master(file):
         df = pd.read_excel(excel, sheet_name="PINTU", header=None)
 
         master["pintu"] = load_pintu(df)
-
-        print(master["pintu"].to_string())
 
     return master

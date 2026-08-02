@@ -1,5 +1,6 @@
 import pandas as pd
 
+from utils.helper import bersihkan_harga
 
 def load_pipa_bestlon(df):
 
@@ -27,8 +28,7 @@ def load_pipa_bestlon(df):
                     .strip()
                 ),
                 "Warna": "PUTIH",
-                "Harga": pd.to_numeric(row["Harga"], errors="coerce"),
+                "Harga": int(float(str(row["Harga"]).replace(",", ".")) * 1000),
             }
         )
-
     return pd.DataFrame(hasil)
