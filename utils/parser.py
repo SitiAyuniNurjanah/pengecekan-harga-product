@@ -8,6 +8,7 @@ from utils.parsers.trilliunware_parser import parse_trilliunware
 from utils.parsers.fitting_basic_parser import parse_fitting_basic
 from utils.parsers.pureflo_fitting_parser import pureflo_fitting_parser
 from utils.parsers.pintu_parser import pintu_parser
+from utils.parsers.steel_parser import parse_steel
 
 
 def parse_product(product_name):
@@ -139,6 +140,28 @@ def parse_product(product_name):
     for keyword in pintu_keyword:
         if keyword in text:
             return pintu_parser(text)
+
+        # =========================
+    # STEEL
+    # =========================
+
+    steel_keyword = [
+        "BONDEK",
+        "CANAL",
+        "CANNAL",
+        "GALVALUM",
+        "HOLLOW",
+        "KASSO",
+        "SENG GELOMBANG",
+        "GENTENG METAL",
+        "SPANDEK",
+        "TRIMDEK",
+        "SUTERA TRIMDEK",
+    ]
+
+    for keyword in steel_keyword:
+        if keyword in text:
+            return parse_steel(text)
 
     # =========================
     # BESTLON

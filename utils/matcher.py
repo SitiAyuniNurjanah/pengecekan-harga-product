@@ -12,6 +12,7 @@ from utils.matchers.fitting_basic_matcher import match_fitting_basic
 from utils.matchers.basic_putih_matcher import match_basic_putih
 from utils.matchers.basic_abu_matcher import match_basic_abu
 from utils.matchers.selang_trilliun_matcher import match_trilliun
+from utils.matchers.steel_matcher import match_steel
 
 
 def match_product(df_order, master):
@@ -207,6 +208,28 @@ def match_product(df_order, master):
                 master_match = match_trilliun(row, master.get("trilliun"))
 
             if master_match is not None and not master_match.empty:
+
+                harga_utama = master_match.iloc[0]["Harga"]
+                status = "COCOK"
+
+            else:
+
+                harga_utama = None
+                status = "TIDAK DITEMUKAN"
+
+        # =========================
+        # STEEL
+        # =========================
+        elif brand == "STEEL":
+            print("MASUK MATCH STEEL")
+            print(row["Nama Barang"])
+
+            master_match = match_steel(
+                row,
+                master.get("steel")
+            )
+
+            if not master_match.empty:
 
                 harga_utama = master_match.iloc[0]["Harga"]
                 status = "COCOK"

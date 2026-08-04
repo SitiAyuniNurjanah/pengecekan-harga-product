@@ -10,6 +10,7 @@ from utils.loaders.trilliunware import load_trilliunware
 from utils.loaders.fitting_basic import load_fitting_basic
 from utils.loaders.pureflo_fitting import load_pureflo_fitting
 from utils.loaders.pintu import load_pintu
+from utils.loaders.steel import load_steel
 
 
 def load_master(file):
@@ -113,5 +114,18 @@ def load_master(file):
         df = pd.read_excel(excel, sheet_name="PINTU", header=None)
 
         master["pintu"] = load_pintu(df)
+
+        # =========================
+    # STEEL
+    # =========================
+    if "STEEL" in excel.sheet_names:
+
+        df = pd.read_excel(
+            excel,
+            sheet_name="STEEL",
+            header=None
+        )
+
+        master["steel"] = load_steel(df)
 
     return master
