@@ -22,12 +22,12 @@ def parse_penguin(text):
     
     elif "PENGUIN OTO LEVEL (NL)" in text:
         result["jenis"] = "SET KIT TOREN"
-    
-    elif "SLIM TANK" in text:
-        result["jenis"] = "SLIM TANK"
 
     elif "UNDERGROUND KIT" in text:
         result["jenis"] = "SET KIT TOREN"
+    
+    elif "SLIM TANK" in text:
+        result["jenis"] = "SLIM TANK"
 
     elif "UNDERGROUND" in text:
         result["jenis"] = "TANGKI"

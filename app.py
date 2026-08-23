@@ -31,17 +31,44 @@ if master_file is not None:
 # =========================
 # Fungsi Highlight
 # =========================
-
-
 def highlight_status(row):
 
-    if row["Status"] == "TIDAK COCOK":
+    # =========================
+    # KHUSUS SET KIT TOREN
+    # =========================
+    if (
+        (
+            row.get("Brand") == "PENGUIN"
+            and row.get("Jenis") == "SET KIT TOREN"
+        )
+        or pd.isna(row.get("Status"))
+        or str(row.get("Status", "")).strip() == ""
+    ):
+        return ["background-color:#b3d9ff"] * len(row)
+
+    # =========================
+    # TIDAK COCOK
+    # =========================
+    elif row["Status"] == "TIDAK COCOK":
         return ["background-color:#ffb3b3"] * len(row)
 
+    # =========================
+    # TIDAK DITEMUKAN
+    # =========================
     elif row["Status"] == "TIDAK DITEMUKAN":
         return ["background-color:#fff3a3"] * len(row)
 
     return [""] * len(row)
+
+# def highlight_status(row):
+
+#     if row["Status"] == "TIDAK COCOK":
+#         return ["background-color:#ffb3b3"] * len(row)
+
+#     elif row["Status"] == "TIDAK DITEMUKAN":
+#         return ["background-color:#fff3a3"] * len(row)
+
+#     return [""] * len(row)
 
 
 # =========================

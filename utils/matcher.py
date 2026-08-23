@@ -29,6 +29,35 @@ def match_product(df_order, master):
 
         brand = bersihkan_text(row.get("Brand", ""))
 
+        # # =========================
+        # # PENGUIN
+        # # =========================
+        # if brand == "PENGUIN":
+
+        #     master_match, tipe = match_penguin(row, master.get("penguin"))
+
+        #     # =========================
+        #     # SET KIT TOREN
+        #     # =========================
+        #     if tipe == "SET_KIT":
+
+        #         harga_utama = bersihkan_harga(row["@Harga"])
+        #         status = "COCOK"
+
+        #     # =========================
+        #     # NORMAL PENGUIN
+        #     # =========================
+        #     elif not master_match.empty:
+
+        #         harga_utama = bersihkan_harga(master_match.iloc[0]["Harga"])
+
+        #         status = "COCOK"
+
+        #     else:
+
+        #         harga_utama = None
+        #         status = "TIDAK DITEMUKAN"
+
         # =========================
         # PENGUIN
         # =========================
@@ -41,15 +70,17 @@ def match_product(df_order, master):
             # =========================
             if tipe == "SET_KIT":
 
-                harga_utama = bersihkan_harga(row["@Harga"])
-                status = "COCOK"
+                harga_utama = None
+                status = ""
 
             # =========================
             # NORMAL PENGUIN
             # =========================
-            elif not master_match.empty:
+            elif master_match is not None and not master_match.empty:
 
-                harga_utama = bersihkan_harga(master_match.iloc[0]["Harga"])
+                harga_utama = bersihkan_harga(
+                    master_match.iloc[0]["Harga"]
+                )
 
                 status = "COCOK"
 
@@ -242,31 +273,45 @@ def match_product(df_order, master):
         # =========================
         # SIMPAN HASIL
         # =========================
-
         hasil.at[index, "Harga Utama"] = harga_utama
 
         harga_pelanggan = bersihkan_harga(row.get("@Harga"))
-
         harga_master = bersihkan_harga(harga_utama)
 
-        if harga_master is None:
+        # =========================
+        # KHUSUS STATUS KOSONG
+        # SET KIT TOREN
+        # =========================
+        if status == "":
+            hasil.at[index, "Status"] = ""
 
+        # =========================
+        # MASTER TIDAK DITEMUKAN
+        # =========================
+        elif harga_master is None:
             hasil.at[index, "Status"] = status
 
+        # =========================
+        # HARGA SAMA
+        # =========================
         elif harga_pelanggan == harga_master:
-
             hasil.at[index, "Status"] = "COCOK"
 
+        # =========================
+        # HARGA BERBEDA
+        # =========================
         else:
-
             hasil.at[index, "Status"] = "TIDAK COCOK"
 
     # =========================
     # FORMAT HARGA TAMPILAN
     # =========================
-
-    hasil["Harga Utama"] = (
-        pd.to_numeric(hasil["Harga Utama"], errors="coerce").fillna(0).astype(int)
+    hasil["Harga Utama"] = pd.to_numeric(
+        hasil["Harga Utama"],
+        errors="coerce"
     )
+    # hasil["Harga Utama"] = (
+    #     pd.to_numeric(hasil["Harga Utama"], errors="coerce").fillna(0).astype(int)
+    # )
 
     return hasil
