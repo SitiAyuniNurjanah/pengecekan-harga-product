@@ -146,6 +146,7 @@ if order_file is not None:
             kolom_tampil = [
                 "Tanggal",
                 "Nomor #",
+                "Pelanggan",
                 "Kode #",
                 "Nama Barang",
                 "@Harga",
