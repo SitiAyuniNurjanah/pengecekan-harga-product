@@ -9,27 +9,83 @@ from utils.parsers.fitting_basic_parser import parse_fitting_basic
 from utils.parsers.pureflo_fitting_parser import pureflo_fitting_parser
 from utils.parsers.pintu_parser import pintu_parser
 from utils.parsers.steel_parser import parse_steel
+from utils.parsers.campur_parser import parse_campur
+from utils.parsers.accsware_parser import parse_accsware
 
 
 def parse_product(product_name):
 
-    text = str(product_name).upper()
+    text = str(product_name).upper().strip()
 
-    # =========================
-    # TRILLIUNWARE
-    # HARUS DI ATAS TRILLIUN
-    # =========================
+    # =====================================================
+    # 1. TRILLIUNWARE
+    # =====================================================
+    # WAJIB PALING ATAS.
+    #
+    # Kalau nama barang secara eksplisit mengandung
+    # "TRILLIUNWARE", maka HARUS masuk TRILLIUNWARE.
+    #
+    # Jangan biarkan keyword seperti:
+    # - BASIN TAP
+    # - SOAP DISH
+    # - FLUSH VALVE
+    # - dll
+    #
+    # mengambil alih sebagai ACCSWARE.
+    # =====================================================
 
     if "TRILLIUNWARE" in text:
         return parse_trilliunware(text)
 
-    # =========================
-    # PENGUIN FILTER
-    # =========================
+    # =====================================================
+    # 2. ACCSWARE
+    # =====================================================
+    #
+    # ACCSWARE dikenali berdasarkan keyword produknya.
+    #
+    # Karena TRILLIUNWARE sudah dicek di atas, produk
+    # TRILLIUNWARE yang kebetulan memiliki keyword yang
+    # sama tidak akan salah masuk ACCSWARE.
+    # =====================================================
+
+    accsware_keyword = [
+        "VESSEL BASIN",
+        "ANGLE VALVE",
+        "BOWL GASKET",
+        "FLUSH VALVE",
+        "SELF CLOSING BASIN TAP",
+        "BASIN TAP",
+        "JET WASHER",
+        "FLEXIBLE HOSE",
+        "P-TRAP",
+        "KRAN TEMBOK",
+        "TANKTRIM",
+        "POP UP",
+        "KRAN CABANG",
+        "FLOOR DRAIN",
+        "PAN CONNECTOR",
+        "SIPHON",
+        "AKSESORIS SEAT",
+        "SEAT COVER",
+        "SOAP DISH",
+        "SENSOR BASIN TAP",
+    ]
+
+    for keyword in accsware_keyword:
+        if keyword in text:
+            return parse_accsware(text)
+
+    # =====================================================
+    # 3. PENGUIN FILTER
+    # =====================================================
+    #
+    # Filter / cartridge / housing PENGUIN tidak diproses
+    # sebagai produk PENGUIN biasa.
+    # =====================================================
 
     if "PENGUIN" in text and any(
-        k in text
-        for k in [
+        keyword in text
+        for keyword in [
             "FILTER",
             "CARTRIDGE",
             "CARTDRIDGE",
@@ -45,32 +101,34 @@ def parse_product(product_name):
             "warna": "",
         }
 
-    # =========================
-    # PENGUIN
-    # =========================
+    # =====================================================
+    # 4. PENGUIN
+    # =====================================================
 
-    if "PENGUIN" in text or "PLUMBING" in text or "KIT" in text:
-        return parse_penguin(text)
-    elif "PENGUIN" in text or "OTO LEVEL (NL)" in text or "KIT" in text:
+    if (
+        "PENGUIN" in text
+        or "PLUMBING" in text
+        or "KIT" in text
+    ):
         return parse_penguin(text)
 
-    # =========================
-    # BASIC PUTIH
-    # =========================
+    # =====================================================
+    # 5. BASIC PUTIH
+    # =====================================================
 
     if "TRILLIUN BASIC" in text and "PUTIH" in text:
         return parse_basic_putih(text)
 
-    # =========================
-    # BASIC ABU
-    # =========================
+    # =====================================================
+    # 6. BASIC ABU
+    # =====================================================
 
     if "TRILLIUN BASIC" in text and "ABU" in text:
         return parse_basic_abu(text)
 
-    # =========================
-    # FITTING BASIC
-    # =========================
+    # =====================================================
+    # 7. FITTING BASIC
+    # =====================================================
 
     fitting_keyword = [
         "KNEE",
@@ -89,12 +147,13 @@ def parse_product(product_name):
     if "TRILLIUN" in text and "BASIC" in text:
 
         for keyword in fitting_keyword:
+
             if keyword in text:
                 return parse_fitting_basic(text)
 
-    # =========================
-    # PUREFLO FITTING
-    # =========================
+    # =====================================================
+    # 8. PUREFLO FITTING
+    # =====================================================
 
     pureflo_keyword = [
         "FAUCET ELBOW WITH METAL",
@@ -118,12 +177,13 @@ def parse_product(product_name):
     if "PUREFLO" in text:
 
         for keyword in pureflo_keyword:
+
             if keyword in text:
                 return pureflo_fitting_parser(text)
 
-    # =========================
-    # PINTU
-    # =========================
+    # =====================================================
+    # 9. PINTU
+    # =====================================================
 
     pintu_keyword = [
         "PINTU PVC",
@@ -138,12 +198,13 @@ def parse_product(product_name):
     ]
 
     for keyword in pintu_keyword:
+
         if keyword in text:
             return pintu_parser(text)
 
-        # =========================
-    # STEEL
-    # =========================
+    # =====================================================
+    # 10. STEEL
+    # =====================================================
 
     steel_keyword = [
         "BONDEK",
@@ -160,29 +221,52 @@ def parse_product(product_name):
     ]
 
     for keyword in steel_keyword:
+
         if keyword in text:
             return parse_steel(text)
 
-    # =========================
-    # BESTLON
-    # =========================
+    # =====================================================
+    # 11. CAMPUR
+    # =====================================================
+
+    campur_keyword = [
+        "POLOS TANGKI",
+        "TSUYULITE",
+        "PP FLAT SHEET",
+        "PP SHEET MOTIF",
+        "BAK MANDI WALRUS",
+        "TRILLIUN GLUE",
+    ]
+
+    for keyword in campur_keyword:
+
+        if keyword in text:
+            return parse_campur(text)
+
+    # =====================================================
+    # 12. BESTLON
+    # =====================================================
 
     if "BESTLON PIPA" in text and "PUTIH" in text:
         return parse_pipa_bestlon(text)
 
-    # =========================
-    # TRILLIUN SELANG
-    # =========================
+    # =====================================================
+    # 13. TRILLIUN SELANG
+    # =====================================================
 
     if "TRILLIUN" in text or "SELANG" in text:
         return parse_trilliun(text)
 
-    # =========================
-    # UNNU
-    # =========================
+    # =====================================================
+    # 14. UNNU
+    # =====================================================
 
     if "UNNU" in text:
         return parse_unnu(text)
+
+    # =====================================================
+    # 15. UNKNOWN
+    # =====================================================
 
     return {
         "brand": "UNKNOWN",

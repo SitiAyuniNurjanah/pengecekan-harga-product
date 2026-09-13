@@ -9,23 +9,7 @@ def match_steel(row, df_steel):
 
     nama = bersihkan_text(row["Nama Barang"])
 
-    print("NAMA ASLI :", row["Nama Barang"])
-    print("SETELAH BERSIHKAN :", nama)
-
     master_match = df_steel.copy()
-
-    print("NAMA ORDER :", nama)
-
-    print("MASTER HOLLOW:")
-    print(
-        df_steel[
-            df_steel["Produk"].str.contains(
-                "HOLLOW",
-                case=False,
-                na=False
-            )
-        ][["Produk","Ukuran","Jenis","Harga"]]
-    )
 
     # =========================
     # HOLLOW
@@ -319,6 +303,4 @@ def match_steel(row, df_steel):
 
             master_match["Harga"] = harga_total
 
-        print("HASIL FILTER HOLLOW")
-        print(master_match[["Produk","Harga"]])
     return master_match

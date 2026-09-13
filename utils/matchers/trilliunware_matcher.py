@@ -1,1340 +1,1184 @@
-# import pandas as pd
-# from utils.helper import bersihkan_text
-
-
-# def match_trilliunware(row, df_trilliunware):
-
-#     if df_trilliunware is None or df_trilliunware.empty:
-#         return pd.DataFrame()
-
-#     nama = bersihkan_text(row["Nama Barang"])
-
-#     master_match = df_trilliunware.copy()
-
-#     # ==================================================
-#     # URINAL
-#     # ==================================================
-
-#     if "VISCARIA" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("URINAL VISCARIA", na=False)
-#         ]
-
-#         if "BODY" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("BODY ONLY", na=False)
-#             ]
-
-#         elif "SET" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("SET", na=False)
-#             ]
-
-#         return master_match
-#     # ==================================================
-#     # VELVET
-#     # ==================================================
-
-#     if "VELVET" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("URINAL VELVET", na=False)
-#         ]
-
-#         if "SET" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("SET", na=False)
-#             ]
-
-#         elif "BODY" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("BODY ONLY", na=False)
-#             ]
-
-#         return master_match
-
-#     # ==================================================
-#     # CLOSET JONGKOK CAPRI MAROON
-#     # ==================================================
-
-#     if "CAPRI" in nama and "MAROON" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("ARABIAN", na=False)
-#         ]
-
-#         return master_match
-
-#     # ==================================================
-#     # RUBY
-#     # ==================================================
-
-#     if "RUBY" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("CD RUBY", na=False)
-#         ]
-
-#         if "TANKTRIM" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("TANKTRIM", na=False)
-#             ]
-
-#         else:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("BLACK", na=False)
-#             ]
-
-#         return master_match
-
-#     # ==================================================
-#     # SAPPHIRA
-#     # ==================================================
-
-#     if "SAPPHIRA" in nama:
-
-#         produk = master_match["Produk"].apply(bersihkan_text)
-
-#         # Smart Washer
-#         if "SMART WASHER" in nama:
-
-#             master_match = master_match[produk.str.contains("SMART WASHER", na=False)]
-
-#         # Black
-#         elif "BLACK" in nama:
-
-#             master_match = master_match[
-#                 produk.str.contains("SAPPHIRA", na=False)
-#                 & produk.str.contains("BLACK", na=False)
-#             ]
-
-#         # White / Light Blue / warna lainnya
-#         else:
-
-#             master_match = master_match[
-#                 produk.str.contains("SAPPHIRA", na=False)
-#                 & produk.str.contains("TANKTRIM", na=False)
-#             ]
-
-#         return master_match
-
-#         # ==================================================
-#     # CLOSET JONGKOK CAPRI
-#     # ==================================================
-
-#     if "CLOSET JONGKOK" in nama and "CAPRI" in nama:
-
-#         produk = master_match["Produk"].apply(bersihkan_text)
-
-#         # 206000
-#         if any(warna in nama for warna in ["S BLUE", "GREY", "BLACK"]):
-
-#             master_match = master_match[produk.str.contains("CJ CAPRI", na=False)]
-
-#         # 193000
-#         elif "MAROON" in nama:
-
-#             master_match = master_match[produk.str.contains("ARABIAN", na=False)]
-
-#         # 149000
-#         else:
-
-#             master_match = master_match[produk.str.contains("ARABIAN", na=False)]
-
-#         return master_match
-
-#     # ==================================================
-#     # CLOSET DUDUK OPAL
-#     # ==================================================
-
-#     if "OPAL" in nama:
-
-#         produk = master_match["Produk"].apply(bersihkan_text)
-
-
-#         # ============================
-#         # OPAL BLACK
-#         # CD Opal (SET) - BLACK
-#         # 1498000
-#         # ============================
-#         if "BLACK" in nama:
-
-#             master_match = master_match[
-#                 produk.str.contains(
-#                     "CD OPAL",
-#                     na=False
-#                 )
-#                 &
-#                 produk.str.contains(
-#                     "BLACK",
-#                     na=False
-#                 )
-#             ]
-
-
-#         # ============================
-#         # OPAL NON BLACK
-#         # CD Opal (SET) - Tanktrim 01
-#         # 1208000
-#         # ============================
-#         else:
-
-#             master_match = master_match[
-#                 produk.str.contains(
-#                     "CD OPAL",
-#                     na=False
-#                 )
-#                 &
-#                 produk.str.contains(
-#                     "TANKTRIM",
-#                     na=False
-#                 )
-#             ]
-
-
-#         return master_match
-
-
-#     # ==================================================
-#     # CLOSET DUDUK JASPER
-#     # ==================================================
-
-#     if "JASPER" in nama:
-
-#         produk = master_match["Produk"].apply(bersihkan_text)
-
-
-#         # ============================
-#         # JASPER SMART WASHER
-#         # 1560000
-#         # ============================
-#         if "SMART WASHER" in nama:
-
-#             master_match = master_match[
-#                 produk.str.contains(
-#                     "JASPER SMART WASHER",
-#                     na=False
-#                 )
-#             ]
-
-
-#         # ============================
-#         # JASPER GREY
-#         # 1327000
-#         # ============================
-#         elif "GREY" in nama:
-
-#             master_match = master_match[
-#                 produk.str.contains(
-#                     "JASPER",
-#                     na=False
-#                 )
-#                 &
-#                 produk.str.contains(
-#                     "GREY",
-#                     na=False
-#                 )
-#             ]
-
-
-#         # ============================
-#         # JASPER SET TANKTRIM
-#         # 985000
-#         # ============================
-#         else:
-
-#             master_match = master_match[
-#                 produk.str.contains(
-#                     "JASPER",
-#                     na=False
-#                 )
-#                 &
-#                 produk.str.contains(
-#                     "TANKTRIM",
-#                     na=False
-#                 )
-#             ]
-
-
-#         return master_match
-
-#     # ==================================================
-#     # CLOSET DUDUK MARION
-#     # ==================================================
-
-#     if "MARION" in nama:
-
-#         produk = master_match["Produk"].apply(bersihkan_text)
-
-
-#         # ============================
-#         # MARION SINGLE FLUSH
-#         # 933000
-#         # ============================
-#         if "SINGLE FLUSH" in nama:
-
-#             master_match = master_match[
-#                 produk.str.contains(
-#                     "CD MARION",
-#                     na=False
-#                 )
-#                 &
-#                 produk.str.contains(
-#                     "SINGLE FLUSH",
-#                     na=False
-#                 )
-#             ]
-
-
-#         # ============================
-#         # MARION TANKTRIM
-#         # 1046000
-#         # ============================
-#         else:
-
-#             master_match = master_match[
-#                 produk.str.contains(
-#                     "CD MARION",
-#                     na=False
-#                 )
-#                 &
-#                 produk.str.contains(
-#                     "TANKTRIM",
-#                     na=False
-#                 )
-#             ]
-
-
-#         return master_match
-
-#     # ===================================
-#     # FILTER TYPE
-#     # ===================================
-
-#     type_row = bersihkan_text(row["Type"])
-
-#     if type_row:
-#         master_match = master_match[
-#             master_match["Type"].apply(bersihkan_text) == type_row
-#         ]
-
-#     # ===================================
-#     # FILTER JENIS
-#     # ===================================
-
-#     jenis_row = bersihkan_text(row["Jenis"])
-
-#     if jenis_row:
-#         master_match = master_match[
-#             master_match["Jenis"].apply(bersihkan_text) == jenis_row
-#         ]
-
-
-#     # ==================================================
-#     # JASPER E-FLUSH
-#     # ==================================================
-
-#     if "JASPER" in nama and "E" in nama and "FLUSH" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("JASPER E - FLUSH", na=False, regex=False)
-#         ]
-
-#         return master_match
-
-#     # ==================================================
-#     # WASTAFEL GARNET TANPA KRAN
-#     # ==================================================
-
-#     if "GARNET" in nama and "TANPA KRAN" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("WALL HUNG GARNET", na=False)
-#         ]
-
-#         master_match = master_match[
-#             master_match["Produk"].apply(bersihkan_text).str.contains("SET", na=False)
-#         ]
-
-#         return master_match
-
-#     # ==================================================
-#     # WASTAFEL LILAC TANPA KRAN
-#     # ==================================================
-
-#     if "LILAC" in nama and "TANPA KRAN" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("WALL HUNG LILAC", na=False)
-#         ]
-
-#         master_match = master_match[
-#             master_match["Produk"].apply(bersihkan_text).str.contains("SET", na=False)
-#         ]
-
-#         return master_match
-
-#     # ==================================================
-#     # GARNET BLACK BODY
-#     # ==================================================
-
-#     if "GARNET" in nama and "BLACK" in nama and "BODY" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("WALL HUNG GARNET", na=False)
-#         ]
-
-#         master_match = master_match[
-#             master_match["Produk"].apply(bersihkan_text).str.contains("BLACK", na=False)
-#         ]
-
-#         return master_match
-
-#     # ==================================================
-#     # KHUSUS CLOSET JONGKOK
-#     # ==================================================
-#     if "CLOSET JONGKOK" in nama:
-
-#         if "CARRIBEAN" in nama:
-
-#             if "WHITE" in nama:
-
-#                 master_match = master_match[
-#                     master_match["Produk"]
-#                     .apply(bersihkan_text)
-#                     .str.contains("WHITE & BLUE", na=False)
-#                 ]
-
-#             elif "LIGHT BLUE" in nama or "BLUE" in nama:
-
-#                 master_match = master_match[
-#                     master_match["Produk"]
-#                     .apply(bersihkan_text)
-#                     .str.contains("S. BLUE", na=False)
-#                 ]
-
-#             return master_match
-
-#     elif "AMETHYST" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("AMETHYST", na=False)
-#         ]
-
-#     elif "JASPER" in nama:
-
-#         if "TANKTRIM" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"].apply(bersihkan_text)
-#                 # .str.contains("JASPER (SET)", na=False)
-#                 .str.contains("JASPER", na=False, regex=False)
-#             ]
-
-#         elif "GREY" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("JASPER - GREY", na=False)
-#             ]
-
-#     elif "EUREKA" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("EUREKA", na=False)
-#         ]
-
-#     elif "MALACHITE" in nama:
-
-#         if "LILAC" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("MALACHITE - LILAC", na=False)
-#             ]
-
-#         elif "GARNET" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("MALACHITE - GARNET", na=False)
-#             ]
-#     # ==================================================
-#     # CITRINE BODY
-#     # ==================================================
-
-#     if "CITRINE" in nama and "BODY" in nama:
-
-#         produk = master_match["Produk"].apply(bersihkan_text)
-
-#         # Black
-#         if "BLACK" in nama:
-
-#             master_match = master_match[
-#                 produk.str.contains("CITRINE", na=False)
-#                 & produk.str.contains("BLACK", na=False)
-#             ]
-
-#         # selain black (white / warna lain)
-#         else:
-
-#             master_match = master_match[
-#                 produk.str.contains("CITRINE", na=False)
-#                 & ~produk.str.contains("BLACK", na=False)
-#                 & produk.str.contains("BODY ONLY", na=False)
-#             ]
-
-#         return master_match
-
-#     elif "BODY ONLY" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("BODY ONLY", na=False)
-#         ]
-
-#     elif "KAKI ONLY" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("KAKI ONLY", na=False)
-#         ]
-
-#     elif "TANPA KRAN" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("SET (TANPA KRAN)", na=False)
-#         ]
-
-#     elif "SINGLE FLUSH" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("SINGLE FLUSH", na=False)
-#         ]
-
-#     elif "INSERT" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("INSERT", na=False)
-#         ]
-
-#     elif "VESSEL" in nama:
-
-#         master_match = master_match[
-#             master_match["Produk"]
-#             .apply(bersihkan_text)
-#             .str.contains("VESSEL", na=False)
-#         ]
-
-#     elif "CARRIBEAN" in nama:
-
-#         if "WHITE" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("WHITE & BLUE", na=False)
-#             ]
-
-#         elif "BLUE" in nama or "LIGHT BLUE" in nama:
-
-#             master_match = master_match[
-#                 master_match["Produk"]
-#                 .apply(bersihkan_text)
-#                 .str.contains("S. BLUE", na=False)
-#             ]
-
-#     return master_match
-
 import pandas as pd
+
 from utils.helper import bersihkan_text
 
 
-def filter_produk(df, keyword):
-    return df[
-        df["Produk"]
-        .apply(bersihkan_text)
-        .str.contains(keyword, na=False, regex=False)
+# ============================================================
+# HELPER
+# ============================================================
+
+def _clean(value):
+    if pd.isna(value):
+        return ""
+    return bersihkan_text(value)
+
+
+def _produk_series(df):
+    if df is None or df.empty or "Produk" not in df.columns:
+        return pd.Series(dtype=str)
+
+    return df["Produk"].fillna("").apply(bersihkan_text)
+
+
+def _contains(series, keyword):
+    if series is None:
+        return pd.Series(dtype=bool)
+
+    return series.str.contains(
+        keyword,
+        na=False,
+        regex=False
+    )
+
+
+def _has_any(text, keywords):
+    return any(keyword in text for keyword in keywords)
+
+
+def _match_produk(master, produk, *keywords):
+    """
+    Semua keyword harus ditemukan di kolom Produk.
+    Tidak bergantung pada prefix CD/CJ.
+    """
+    if master is None or master.empty:
+        return pd.DataFrame()
+
+    mask = pd.Series(True, index=master.index)
+
+    for keyword in keywords:
+        mask &= _contains(produk, keyword)
+
+    return master[mask]
+
+
+def _match_model(master, produk, model):
+    """
+    Cari berdasarkan nama model saja.
+    Contoh:
+    - CD SAPPHIRA
+    - SAPPHIRA
+    - SAPPHIRA CLOSE COUPLED
+
+    Semuanya tetap bisa ditemukan selama mengandung SAPPHIRA.
+    """
+    if master is None or master.empty:
+        return pd.DataFrame()
+
+    return master[
+        _contains(produk, model)
     ]
 
+
+def _filter_variant(df, *keywords):
+    if df is None or df.empty:
+        return pd.DataFrame()
+
+    produk = _produk_series(df)
+
+    mask = pd.Series(True, index=df.index)
+
+    for keyword in keywords:
+        mask &= _contains(produk, keyword)
+
+    return df[mask]
+
+
+def _exclude_variant(df, *keywords):
+    if df is None or df.empty:
+        return pd.DataFrame()
+
+    produk = _produk_series(df)
+
+    mask = pd.Series(True, index=df.index)
+
+    for keyword in keywords:
+        mask &= ~_contains(produk, keyword)
+
+    return df[mask]
+
+
+def _first_not_empty(*matches):
+    for match in matches:
+        if match is not None and not match.empty:
+            return match
+
+    return pd.DataFrame()
+
+
+# ============================================================
+# MAIN MATCHER
+# ============================================================
 
 def match_trilliunware(row, df_trilliunware):
 
     if df_trilliunware is None or df_trilliunware.empty:
         return pd.DataFrame()
 
-    nama = bersihkan_text(row["Nama Barang"])
+    nama = _clean(row.get("Nama Barang", ""))
+    jenis = _clean(row.get("Jenis", ""))
+    type_row = _clean(row.get("Type", ""))
+    warna = _clean(row.get("Warna", ""))
 
-    master_match = df_trilliunware.copy()
+    if not nama:
+        return pd.DataFrame()
 
-    produk = master_match["Produk"].apply(bersihkan_text)
+    master = df_trilliunware.copy()
+
+    produk = _produk_series(master)
+
+    if produk.empty:
+        return pd.DataFrame()
 
 
-    # ==================================================
-    # URINAL VISCARIA
-    # ==================================================
+    # ========================================================
+    # 1. URINAL VISCARIA
+    # ========================================================
 
     if "VISCARIA" in nama:
 
-        master_match = master_match[
-            produk.str.contains("URINAL VISCARIA", na=False)
-        ]
+        match = _match_produk(
+            master,
+            produk,
+            "VISCARIA"
+        )
 
         if "BODY" in nama:
+            body = _filter_variant(
+                match,
+                "BODY ONLY"
+            )
 
-            master_match = master_match[
-                master_match["Produk"]
-                .apply(bersihkan_text)
-                .str.contains("BODY ONLY", na=False)
-            ]
+            if not body.empty:
+                return body
 
-        elif "SET" in nama:
+        if "SET" in nama:
+            set_match = _filter_variant(
+                match,
+                "SET"
+            )
 
-            master_match = master_match[
-                master_match["Produk"]
-                .apply(bersihkan_text)
-                .str.contains("SET", na=False)
-            ]
+            if not set_match.empty:
+                return set_match
 
-        return master_match
+        return match
 
 
-    # ==================================================
-    # URINAL VELVET
-    # ==================================================
+    # ========================================================
+    # 2. URINAL VELVET
+    # ========================================================
 
     if "VELVET" in nama:
 
-        master_match = master_match[
-            produk.str.contains("URINAL VELVET", na=False)
-        ]
+        match = _match_produk(
+            master,
+            produk,
+            "VELVET"
+        )
 
         if "BODY" in nama:
-
-            master_match = master_match[
-                master_match["Produk"]
-                .apply(bersihkan_text)
-                .str.contains("BODY ONLY", na=False)
-            ]
-
-        elif "SET" in nama:
-
-            master_match = master_match[
-                master_match["Produk"]
-                .apply(bersihkan_text)
-                .str.contains("SET", na=False)
-            ]
-
-        return master_match
-
-
-    # ==================================================
-    # RUBY
-    # ==================================================
-
-    if "RUBY" in nama:
-
-        produk = master_match["Produk"].apply(bersihkan_text)
-
-
-        # ==================================
-        # RUBY BLACK
-        # CD Ruby (SET) - Black
-        # 1293000
-        # ==================================
-
-        if "BLACK" in nama:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CD RUBY",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "BLACK",
-                    na=False
-                )
-            ]
-
-
-        # ==================================
-        # RUBY MAROON
-        # CD Ruby (SET) - Tanktrim 01
-        # 1241000
-        # ==================================
-
-        elif "MAROON" in nama:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CD RUBY",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "TANKTRIM",
-                    na=False
-                )
-            ]
-
-
-        # ==================================
-        # RUBY WARNA LAIN
-        # Brilliant White
-        # Ivory
-        # Light Blue
-        #
-        # CD Ruby (SET) - Tanktrim 01
-        # 1062000
-        # ==================================
-
-        else:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CD RUBY",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "TANKTRIM",
-                    na=False
-                )
-            ]
-
-
-        return master_match
-
-    # ==================================================
-    # SAPPHIRA
-    # ==================================================
-
-    if "SAPPHIRA" in nama:
-
-        if "SMART WASHER" in nama:
-
-            master_match = master_match[
-                produk.str.contains("SMART WASHER", na=False)
-            ]
-
-        elif "BLACK" in nama:
-
-            master_match = master_match[
-                produk.str.contains("SAPPHIRA", na=False)
-                &
-                produk.str.contains("BLACK", na=False)
-            ]
-
-        else:
-
-            master_match = master_match[
-                produk.str.contains("SAPPHIRA", na=False)
-                &
-                produk.str.contains("TANKTRIM", na=False)
-            ]
-
-        return master_match
-
-
-    # ==================================================
-    # CLOSET JONGKOK CAPRI
-    # ==================================================
-
-    if "CLOSET JONGKOK" in nama and "CAPRI" in nama:
-
-
-        # ------------------------------
-        # CAPRI WARNA KHUSUS 206000
-        # ------------------------------
-
-        if any(
-            warna in nama
-            for warna in [
-                "S BLUE",
-                "GREY",
-                "BLACK"
-            ]
-        ):
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CJ CAPRI",
-                    na=False
-                )
-            ]
-
-
-        # ------------------------------
-        # CAPRI MAROON 193000
-        # ------------------------------
-
-        elif "MAROON" in nama:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "ARABIAN",
-                    na=False
-                )
-            ]
-
-
-        # ------------------------------
-        # CAPRI WARNA NORMAL 149000
-        # ------------------------------
-
-        else:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "ARABIAN / EMERALD / CAPRI",
-                    na=False
-                )
-            ]
-
-        return master_match
-
-
-    # ==================================================
-    # CLOSET DUDUK OPAL
-    # ==================================================
-
-    if "OPAL" in nama:
-
-
-        if "BLACK" in nama:
-
-            master_match = master_match[
-                produk.str.contains("CD OPAL", na=False)
-                &
-                produk.str.contains("BLACK", na=False)
-            ]
-
-
-        else:
-
-            master_match = master_match[
-                produk.str.contains("CD OPAL", na=False)
-                &
-                produk.str.contains("TANKTRIM", na=False)
-            ]
-
-
-        return master_match
-
-
-    # ==================================================
-    # CLOSET DUDUK JASPER
-    # ==================================================
-
-    if "JASPER" in nama:
-
-
-        # PRIORITAS 1 SMART WASHER
-
-        if "SMART WASHER" in nama:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "JASPER SMART WASHER",
-                    na=False
-                )
-            ]
-
-
-        # PRIORITAS 2 GREY
-
-        elif "GREY" in nama:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CD JASPER",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "GREY",
-                    na=False
-                )
-            ]
-
-
-        # PRIORITAS 3 NORMAL
-
-        else:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CD JASPER",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "TANKTRIM",
-                    na=False
-                )
-            ]
-
-        return master_match
-
-    # ==================================================
-    # CLOSET DUDUK MARION
-    # ==================================================
-
-    if "MARION" in nama:
-
-        # PRIORITAS SINGLE FLUSH
-
-        if "SINGLE FLUSH" in nama:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CD MARION",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "SINGLE FLUSH",
-                    na=False
-                )
-            ]
-
-
-        # NORMAL TANKTRIM
-
-        else:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "CD MARION",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "TANKTRIM",
-                    na=False
-                )
-            ]
-
-        return master_match
-
-    # ==================================================
-    # JASPER E-FLUSH
-    # ==================================================
-
-    if "JASPER" in nama and "E" in nama and "FLUSH" in nama:
-
-        master_match = master_match[
-            produk.str.contains(
-                "JASPER E - FLUSH",
-                na=False
+            body = _filter_variant(
+                match,
+                "BODY ONLY"
             )
-        ]
 
-        return master_match
+            if not body.empty:
+                return body
 
-    # ==================================================
-    # WASTAFEL GARNET TANPA KRAN
-    # ==================================================
-
-    if "GARNET" in nama and "TANPA KRAN" in nama:
-
-        master_match = master_match[
-            produk.str.contains(
-                "WALL HUNG GARNET",
-                na=False
+        if "SET" in nama:
+            set_match = _filter_variant(
+                match,
+                "SET"
             )
-        ]
 
-        master_match = master_match[
-            master_match["Produk"]
-            .apply(bersihkan_text)
-            .str.contains(
-                "SET",
-                na=False
-            )
-        ]
+            if not set_match.empty:
+                return set_match
 
-        return master_match
-
-    # ==================================================
-    # WASTAFEL LILAC TANPA KRAN
-    # ==================================================
-
-    if "LILAC" in nama and "TANPA KRAN" in nama:
-
-        master_match = master_match[
-            produk.str.contains(
-                "WALL HUNG LILAC",
-                na=False
-            )
-        ]
-
-        master_match = master_match[
-            master_match["Produk"]
-            .apply(bersihkan_text)
-            .str.contains(
-                "SET",
-                na=False
-            )
-        ]
-
-        return master_match
-
-    # ==================================================
-    # GARNET BLACK BODY
-    # ==================================================
-
-    if "GARNET" in nama and "BLACK" in nama and "BODY" in nama:
-
-        master_match = master_match[
-            produk.str.contains(
-                "WALL HUNG GARNET",
-                na=False
-            )
-            &
-            produk.str.contains(
-                "BLACK",
-                na=False
-            )
-        ]
-
-        return master_match
-
-    # ==================================================
-    # CITRINE BODY
-    # ==================================================
-
-    if "CITRINE" in nama and "BODY" in nama:
+        return match
 
 
-        if "BLACK" in nama:
+    # ========================================================
+    # 3. URINAL PARTISI
+    # ========================================================
 
-            master_match = master_match[
-                produk.str.contains(
-                    "CITRINE",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "BLACK",
-                    na=False
-                )
-            ]
+    if "URINAL" in nama and "PARTISI" in nama:
+
+        return _match_produk(
+            master,
+            produk,
+            "URINAL",
+            "PARTISI"
+        )
 
 
-        else:
+    # ========================================================
+    # 4. SOAP DISH
+    # ========================================================
 
-            master_match = master_match[
-                produk.str.contains(
-                    "CITRINE",
-                    na=False
-                )
-                &
-                produk.str.contains(
-                    "BODY ONLY",
-                    na=False
-                )
-                &
-                ~produk.str.contains(
-                    "BLACK",
-                    na=False
-                )
-            ]
+    if "SOAP DISH" in nama:
 
-        return master_match
+        return _match_produk(
+            master,
+            produk,
+            "SOAP DISH"
+        )
 
-    # ==================================================
-    # AMETHYST
-    # ==================================================
 
-    if "AMETHYST" in nama:
+    # ========================================================
+    # 5. BASIN TAP / KROOZ
+    # ========================================================
 
-        master_match = master_match[
-            produk.str.contains(
-                "AMETHYST",
-                na=False
-            )
-        ]
+    if "BASIN TAP" in nama:
 
-        return master_match
+        match = _match_produk(
+            master,
+            produk,
+            "BASIN TAP"
+        )
 
-    # ==================================================
-    # MALACHITE
-    # ==================================================
+        krooz = _filter_variant(
+            match,
+            "KROOZ"
+        )
+
+        if not krooz.empty:
+            return krooz
+
+        return match
+
+
+    # ========================================================
+    # 6. MALACHITE
+    # ========================================================
 
     if "MALACHITE" in nama:
 
+        match = _match_model(
+            master,
+            produk,
+            "MALACHITE"
+        )
+
+        if "GARNET" in nama:
+
+            garnet = _filter_variant(
+                match,
+                "GARNET"
+            )
+
+            if not garnet.empty:
+                return garnet
 
         if "LILAC" in nama:
 
-            master_match = master_match[
-                produk.str.contains(
-                    "MALACHITE - LILAC",
-                    na=False
+            lilac = _filter_variant(
+                match,
+                "LILAC"
+            )
+
+            if "KAKI ONLY" in nama:
+
+                kaki = _filter_variant(
+                    lilac,
+                    "KAKI ONLY"
                 )
-            ]
 
+                if not kaki.empty:
+                    return kaki
 
-        elif "GARNET" in nama:
+            if "TANPA KRAN" in nama:
 
-            master_match = master_match[
-                produk.str.contains(
-                    "MALACHITE - GARNET",
-                    na=False
+                tanpa_kran = _filter_variant(
+                    lilac,
+                    "SET",
+                    "TANPA KRAN"
                 )
-            ]
 
-        return master_match
+                if not tanpa_kran.empty:
+                    return tanpa_kran
 
-    # ==================================================
-    # BODY ONLY
-    # ==================================================
+            if not lilac.empty:
+                return lilac
 
-    if "BODY ONLY" in nama:
+        return match
 
-        master_match = master_match[
-            produk.str.contains(
-                "BODY ONLY",
-                na=False
+
+    # ========================================================
+    # 7. WASTAFEL GARNET
+    # ========================================================
+
+    if "GARNET" in nama and "WALL HUNG" in nama:
+
+        match = _match_produk(
+            master,
+            produk,
+            "GARNET",
+            "WALL HUNG"
+        )
+
+        if "TANPA KRAN" in nama:
+
+            tanpa_kran = _filter_variant(
+                match,
+                "SET"
             )
-        ]
 
-        return master_match
-
-
-
-    # ==================================================
-    # KAKI ONLY
-    # ==================================================
-
-    if "KAKI ONLY" in nama:
-
-        master_match = master_match[
-            produk.str.contains(
-                "KAKI ONLY",
-                na=False
+            tanpa_kran = _exclude_variant(
+                tanpa_kran,
+                "BLACK",
+                "GREY"
             )
-        ]
 
-        return master_match
+            if not tanpa_kran.empty:
+                return tanpa_kran
 
+        if "BLACK" in nama:
 
-
-    # ==================================================
-    # TANPA KRAN
-    # ==================================================
-
-    if "TANPA KRAN" in nama:
-
-        master_match = master_match[
-            produk.str.contains(
-                "SET (TANPA KRAN)",
-                na=False
+            black = _filter_variant(
+                match,
+                "BLACK"
             )
-        ]
 
-        return master_match
+            if "SET" in nama or "KRAN" in nama:
 
+                set_black = _filter_variant(
+                    black,
+                    "SET"
+                )
 
+                if not set_black.empty:
+                    return set_black
 
-    # ==================================================
-    # SINGLE FLUSH
-    # ==================================================
+            return black
 
-    if "SINGLE FLUSH" in nama:
+        if "GREY" in nama:
 
-        master_match = master_match[
-            produk.str.contains(
-                "SINGLE FLUSH",
-                na=False
+            grey = _filter_variant(
+                match,
+                "GREY"
             )
-        ]
 
-        return master_match
+            if "SET" in nama or "KRAN" in nama:
+
+                set_grey = _filter_variant(
+                    grey,
+                    "SET"
+                )
+
+                if not set_grey.empty:
+                    return set_grey
+
+            return grey
+
+        return match
 
 
+    # ========================================================
+    # 8. WASTAFEL LILAC
+    # ========================================================
 
-    # ==================================================
-    # INSERT
-    # ==================================================
+    if "LILAC" in nama and "WALL HUNG" in nama:
 
-    if "INSERT" in nama:
+        match = _match_produk(
+            master,
+            produk,
+            "LILAC",
+            "WALL HUNG"
+        )
 
-        master_match = master_match[
-            produk.str.contains(
-                "INSERT",
-                na=False
+        if "TANPA KRAN" in nama:
+
+            set_match = _filter_variant(
+                match,
+                "SET"
             )
-        ]
 
-        return master_match
+            if not set_match.empty:
+                return set_match
+
+        return match
 
 
+    # ========================================================
+    # 9. WASTAFEL CITRINE
+    # ========================================================
 
-    # ==================================================
-    # VESSEL
-    # ==================================================
+    if "CITRINE" in nama and "WALL HUNG" in nama:
 
-    if "VESSEL" in nama:
+        match = _match_produk(
+            master,
+            produk,
+            "CITRINE",
+            "WALL HUNG"
+        )
 
-        master_match = master_match[
-            produk.str.contains(
-                "VESSEL",
-                na=False
+        if "BLACK" in nama:
+
+            black = _filter_variant(
+                match,
+                "BLACK"
             )
-        ]
 
-        return master_match
+            if not black.empty:
+                return black
+
+        body = _filter_variant(
+            match,
+            "BODY ONLY"
+        )
+
+        body = _exclude_variant(
+            body,
+            "BLACK"
+        )
+
+        if not body.empty:
+            return body
+
+        return match
 
 
+    # ========================================================
+    # 10. WASTAFEL COBALT
+    # ========================================================
 
-    # ==================================================
-    # CARRIBEAN
-    # ==================================================
+    if "COBALT" in nama and "WALL HUNG" in nama:
+
+        return _match_produk(
+            master,
+            produk,
+            "COBALT",
+            "WALL HUNG",
+            "BODY ONLY"
+        )
+
+
+    # ========================================================
+    # 11. WASTAFEL PERIDOT
+    # ========================================================
+
+    if "PERIDOT" in nama and "WALL HUNG" in nama:
+
+        return _match_produk(
+            master,
+            produk,
+            "PERIDOT",
+            "WALL HUNG",
+            "BODY ONLY"
+        )
+
+
+    # ========================================================
+    # 12. CLOSET JONGKOK - CAPRI
+    # ========================================================
+
+    if "CAPRI" in nama and (
+        "CLOSET JONGKOK" in nama
+        or "CJ" in nama
+    ):
+
+        match = _match_produk(
+            master,
+            produk,
+            "CAPRI"
+        )
+
+        if "MAROON" in nama:
+
+            maroon = _filter_variant(
+                match,
+                "MAROON"
+            )
+
+            if not maroon.empty:
+                return maroon
+
+            special = _filter_variant(
+                match,
+                "ARABIAN",
+                "EMERALD",
+                "CAPRI"
+            )
+
+            if not special.empty:
+                return special
+
+        return match
+
+
+    # ========================================================
+    # 13. CLOSET JONGKOK CARRIBEAN
+    # ========================================================
 
     if "CARRIBEAN" in nama:
 
-        produk = master_match["Produk"].apply(bersihkan_text)
+        match = _match_produk(
+            master,
+            produk,
+            "CARRIBEAN"
+        )
 
-
-        # ==================================
-        # WHITE & BLUE
-        # Light Blue masuk sini
-        # 188000
-        # ==================================
-
-        if "LIGHT BLUE" in nama or "WHITE" in nama:
-
-            master_match = master_match[
-                produk.str.contains(
-                    "WHITE & BLUE",
-                    na=False
-                )
-            ]
-
-
-        # ==================================
-        # S. BLUE / GREY / BLACK / MAROON
-        # 261000
-        # ==================================
-
-        elif any(
-            warna in nama
-            for warna in [
-                "S BLUE",
-                "GREY",
-                "BLACK",
-                "MAROON"
-            ]
+        if (
+            "WHITE" in nama
+            or "LIGHT BLUE" in nama
+            or "SORRENTO BLUE" in nama
         ):
 
-            master_match = master_match[
-                produk.str.contains(
-                    "S BLUE",
-                    na=False
-                )
-                |
-                produk.str.contains(
-                    "GREY",
-                    na=False
-                )
-                |
-                produk.str.contains(
-                    "BLACK",
-                    na=False
-                )
-                |
-                produk.str.contains(
-                    "MAROON",
-                    na=False
-                )
-            ]
+            white_blue = _filter_variant(
+                match,
+                "WHITE"
+            )
 
-        return master_match
+            if not white_blue.empty:
+                return white_blue
 
-    # ==================================================
-    # FILTER TYPE
-    # ==================================================
+            blue = _filter_variant(
+                match,
+                "BLUE"
+            )
 
-    type_row = bersihkan_text(row["Type"])
+            if not blue.empty:
+                return blue
 
-    if type_row:
+        if "GREY" in nama:
 
-        master_match = master_match[
-            master_match["Type"]
-            .apply(bersihkan_text)
-            ==
-            type_row
+            grey = _filter_variant(
+                match,
+                "GREY"
+            )
+
+            if not grey.empty:
+                return grey
+
+        if "BLACK" in nama:
+
+            black = _filter_variant(
+                match,
+                "BLACK"
+            )
+
+            if not black.empty:
+                return black
+
+        if "MAROON" in nama:
+
+            maroon = _filter_variant(
+                match,
+                "MAROON"
+            )
+
+            if not maroon.empty:
+                return maroon
+
+        return match
+
+
+    # ========================================================
+    # 14. CLOSET JONGKOK JEWEL
+    # ========================================================
+
+    if "JEWEL" in nama:
+
+        return _match_produk(
+            master,
+            produk,
+            "JEWEL"
+        )
+
+
+    # ========================================================
+    # 15. TOURMALINE FLUSH VALVE
+    # ========================================================
+
+    if "TOURMALINE" in nama:
+
+        return _match_produk(
+            master,
+            produk,
+            "TOURMALINE",
+            "FLUSH VALVE"
+        )
+
+
+    # ========================================================
+    # 16. CLOSET DUDUK
+    # ========================================================
+
+    is_closet_duduk = (
+        jenis == "CLOSET DUDUK"
+        or "CLOSET DUDUK" in nama
+        or type_row in [
+            "AMETHYST",
+            "EUREKA",
+            "EMERALD",
+            "CAPRI",
+            "CARRIBEAN",
+            "MARION",
+            "RUBY",
+            "SAPPHIRA",
+            "OPAL",
+            "JASPER",
+            "HARVEST",
+            "ANDALUZITE",
+            "CHRYSOLITE",
+            "RHODOLITE",
+            "SODALITE",
+            "SPENE",
+            "MALACHITE",
+            "GARNET",
+            "COBALT",
+            "LILAC",
+            "KROOZ",
+            "PYRITE",
+            "JUNIPER",
+            "CITRINE",
+            "PERIDOT",
+        ]
+    )
+
+    if is_closet_duduk:
+
+        # ====================================================
+        # MODEL SIMPLE
+        # ====================================================
+
+        simple_models = [
+            "AMETHYST",
+            "HARVEST",
+            "ANDALUZITE",
+            "RHODOLITE",
+            "SPENE",
+            "CHRYSOLITE",
+            "PYRITE",
+            "JUNIPER",
         ]
 
+        for model in simple_models:
+
+            if (
+                type_row == model
+                or model in nama
+            ):
+
+                match = _match_model(
+                    master,
+                    produk,
+                    model
+                )
+
+                if not match.empty:
+                    return match
 
 
-    # ==================================================
-    # FILTER JENIS
-    # ==================================================
+        # ====================================================
+        # EUREKA
+        # ====================================================
 
-    jenis_row = bersihkan_text(row["Jenis"])
+        if (
+            type_row == "EUREKA"
+            or "EUREKA" in nama
+        ):
 
-    if jenis_row:
+            match = _match_model(
+                master,
+                produk,
+                "EUREKA"
+            )
 
-        master_match = master_match[
-            master_match["Jenis"]
-            .apply(bersihkan_text)
-            ==
-            jenis_row
+            if "SET" in nama:
+
+                set_match = _filter_variant(
+                    match,
+                    "SET"
+                )
+
+                if not set_match.empty:
+                    return set_match
+
+            return match
+
+
+        # ====================================================
+        # JASPER
+        # ====================================================
+
+        if (
+            type_row == "JASPER"
+            or "JASPER" in nama
+        ):
+
+            match = _match_model(
+                master,
+                produk,
+                "JASPER"
+            )
+
+            # E-FLUSH
+            if _has_any(
+                nama,
+                [
+                    "E-FLUSH",
+                    "E FLUSH",
+                    "E - FLUSH"
+                ]
+            ):
+
+                flush = _filter_variant(
+                    match,
+                    "FLUSH"
+                )
+
+                if not flush.empty:
+                    return flush
+
+
+            # SMART WASHER
+            if "SMART WASHER" in nama:
+
+                smart = _filter_variant(
+                    match,
+                    "SMART WASHER"
+                )
+
+                if not smart.empty:
+                    return smart
+
+                smart = _filter_variant(
+                    match,
+                    "SW"
+                )
+
+                if not smart.empty:
+                    return smart
+
+
+            # GREY
+            if "GREY" in nama:
+
+                grey = _filter_variant(
+                    match,
+                    "GREY"
+                )
+
+                if not grey.empty:
+                    return grey
+
+
+            # NORMAL
+            tanktrim = _filter_variant(
+                match,
+                "TANKTRIM"
+            )
+
+            if not tanktrim.empty:
+                return tanktrim
+
+            return match
+
+
+        # ====================================================
+        # MARION
+        # ====================================================
+
+        if (
+            type_row == "MARION"
+            or "MARION" in nama
+        ):
+
+            match = _match_model(
+                master,
+                produk,
+                "MARION"
+            )
+
+            if "SINGLE FLUSH" in nama:
+
+                single = _filter_variant(
+                    match,
+                    "SINGLE FLUSH"
+                )
+
+                if not single.empty:
+                    return single
+
+
+            if "DOUBLE FLUSH" in nama:
+
+                double = _filter_variant(
+                    match,
+                    "DOUBLE FLUSH"
+                )
+
+                if not double.empty:
+                    return double
+
+                tanktrim = _filter_variant(
+                    match,
+                    "TANKTRIM"
+                )
+
+                if not tanktrim.empty:
+                    return tanktrim
+
+
+            tanktrim = _filter_variant(
+                match,
+                "TANKTRIM"
+            )
+
+            if not tanktrim.empty:
+                return tanktrim
+
+            return match
+
+
+        # ====================================================
+        # OPAL
+        # ====================================================
+
+        if (
+            type_row == "OPAL"
+            or "OPAL" in nama
+        ):
+
+            match = _match_model(
+                master,
+                produk,
+                "OPAL"
+            )
+
+            if "BLACK" in nama:
+
+                black = _filter_variant(
+                    match,
+                    "BLACK"
+                )
+
+                if not black.empty:
+                    return black
+
+
+            tanktrim = _filter_variant(
+                match,
+                "TANKTRIM"
+            )
+
+            if not tanktrim.empty:
+                return tanktrim
+
+            return match
+
+
+        # ====================================================
+        # RUBY
+        # ====================================================
+
+        if (
+            type_row == "RUBY"
+            or "RUBY" in nama
+        ):
+
+            match = _match_model(
+                master,
+                produk,
+                "RUBY"
+            )
+
+            if "BLACK" in nama:
+
+                black = _filter_variant(
+                    match,
+                    "BLACK"
+                )
+
+                if not black.empty:
+                    return black
+
+
+            if "MAROON" in nama:
+
+                maroon = _filter_variant(
+                    match,
+                    "MAROON"
+                )
+
+                if not maroon.empty:
+                    return maroon
+
+                tanktrim = _filter_variant(
+                    match,
+                    "TANKTRIM"
+                )
+
+                if not tanktrim.empty:
+                    return tanktrim
+
+
+            tanktrim = _filter_variant(
+                match,
+                "TANKTRIM"
+            )
+
+            if not tanktrim.empty:
+                return tanktrim
+
+            return match
+
+
+        # ====================================================
+        # SAPPHIRA
+        # ====================================================
+
+        if (
+            type_row == "SAPPHIRA"
+            or "SAPPHIRA" in nama
+        ):
+
+            match = _match_model(
+                master,
+                produk,
+                "SAPPHIRA"
+            )
+
+            # SMART WASHER
+            if "SMART WASHER" in nama:
+
+                smart = _filter_variant(
+                    match,
+                    "SMART WASHER"
+                )
+
+                if not smart.empty:
+                    return smart
+
+                smart = _filter_variant(
+                    match,
+                    "SW"
+                )
+
+                if not smart.empty:
+                    return smart
+
+
+            # BLACK
+            if "BLACK" in nama:
+
+                black = _filter_variant(
+                    match,
+                    "BLACK"
+                )
+
+                if not black.empty:
+                    return black
+
+
+            tanktrim = _filter_variant(
+                match,
+                "TANKTRIM"
+            )
+
+            if not tanktrim.empty:
+                return tanktrim
+
+            return match
+
+
+        # ====================================================
+        # SODALITE
+        # ====================================================
+
+        if (
+            type_row == "SODALITE"
+            or "SODALITE" in nama
+        ):
+
+            match = _match_model(
+                master,
+                produk,
+                "SODALITE"
+            )
+
+            # SMART WASHER
+            if "SMART WASHER" in nama:
+
+                smart = _filter_variant(
+                    match,
+                    "SMART WASHER"
+                )
+
+                if not smart.empty:
+                    return smart
+
+                smart = _filter_variant(
+                    match,
+                    "SW"
+                )
+
+                if not smart.empty:
+                    return smart
+
+
+            # UFR
+            if "UFR" in nama:
+
+                ufr = _filter_variant(
+                    match,
+                    "UFR"
+                )
+
+                if not ufr.empty:
+                    return ufr
+
+
+            # NORMAL
+            normal = _exclude_variant(
+                match,
+                "SMART WASHER",
+                "UFR"
+            )
+
+            if not normal.empty:
+                return normal
+
+            return match
+
+
+        # ====================================================
+        # MODEL LAIN
+        # ====================================================
+
+        known_models = [
+            "AMETHYST",
+            "EUREKA",
+            "EMERALD",
+            "CAPRI",
+            "CARRIBEAN",
+            "MARION",
+            "RUBY",
+            "SAPPHIRA",
+            "OPAL",
+            "JASPER",
+            "HARVEST",
+            "ANDALUZITE",
+            "CHRYSOLITE",
+            "RHODOLITE",
+            "SODALITE",
+            "SPENE",
+            "MALACHITE",
+            "GARNET",
+            "COBALT",
+            "LILAC",
+            "KROOZ",
+            "PYRITE",
+            "JUNIPER",
+            "CITRINE",
+            "PERIDOT",
         ]
 
+        for model in known_models:
+
+            if (
+                type_row == model
+                or model in nama
+            ):
+
+                match = _match_model(
+                    master,
+                    produk,
+                    model
+                )
+
+                if not match.empty:
+                    return match
 
 
-    return master_match
+    # ========================================================
+    # 17. GENERIC TYPE
+    # ========================================================
+
+    if type_row and "Type" in master.columns:
+
+        master_type = (
+            master["Type"]
+            .fillna("")
+            .apply(bersihkan_text)
+        )
+
+        match = master[
+            master_type == type_row
+        ]
+
+        if not match.empty:
+            return match
+
+
+    # ========================================================
+    # 18. GENERIC JENIS
+    # ========================================================
+
+    if jenis and "Jenis" in master.columns:
+
+        master_jenis = (
+            master["Jenis"]
+            .fillna("")
+            .apply(bersihkan_text)
+        )
+
+        match = master[
+            master_jenis == jenis
+        ]
+
+        if not match.empty:
+            return match
+
+
+    # ========================================================
+    # 19. FALLBACK MODEL DARI NAMA
+    # ========================================================
+
+    known_models = [
+        "AMETHYST",
+        "EUREKA",
+        "EMERALD",
+        "CAPRI",
+        "CARRIBEAN",
+        "MARION",
+        "RUBY",
+        "SAPPHIRA",
+        "OPAL",
+        "JASPER",
+        "HARVEST",
+        "ANDALUZITE",
+        "CHRYSOLITE",
+        "RHODOLITE",
+        "SODALITE",
+        "SPENE",
+        "MALACHITE",
+        "GARNET",
+        "COBALT",
+        "LILAC",
+        "KROOZ",
+        "PYRITE",
+        "JUNIPER",
+        "CITRINE",
+        "PERIDOT",
+    ]
+
+    for model in known_models:
+
+        if model in nama:
+
+            match = _match_model(
+                master,
+                produk,
+                model
+            )
+
+            if not match.empty:
+                return match
+
+
+    # ========================================================
+    # 20. TIDAK DITEMUKAN
+    # ========================================================
+
+    return pd.DataFrame()

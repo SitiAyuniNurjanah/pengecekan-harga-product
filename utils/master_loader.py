@@ -11,6 +11,8 @@ from utils.loaders.fitting_basic import load_fitting_basic
 from utils.loaders.pureflo_fitting import load_pureflo_fitting
 from utils.loaders.pintu import load_pintu
 from utils.loaders.steel import load_steel
+from utils.loaders.campur import load_campur
+from utils.loaders.accsware import load_accsware
 
 
 def load_master(file):
@@ -22,12 +24,16 @@ def load_master(file):
     # =========================
     # PENGUIN TOREN
     # =========================
+
     if "PENGUIN TOREN" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="PENGUIN TOREN", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="PENGUIN TOREN",
+            header=None
+        )
 
         master["penguin"] = load_penguin(df)
-
 
     # =========================
     # SELANG TRILLIUN
@@ -43,81 +49,122 @@ def load_master(file):
 
         master["trilliun"] = load_trilliun(df)
 
-    # # =========================
-    # # PIPA BASIC PUTIH
-    # # =========================
+    # =========================
+    # PIPA BASIC PUTIH
+    # =========================
+
     if "PIPA BASIC PUTIH" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="PIPA BASIC PUTIH", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="PIPA BASIC PUTIH",
+            header=None
+        )
 
         master["basic_putih"] = load_basic_putih(df)
 
-    # # =========================
-    # # PIPA BASIC ABU
-    # # =========================
+    # =========================
+    # PIPA BASIC ABU
+    # =========================
+
     if "PIPA BASIC ABU" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="PIPA BASIC ABU", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="PIPA BASIC ABU",
+            header=None
+        )
 
         master["basic_abu"] = load_basic_abu(df)
 
-    # # =========================
-    # # PIPA BESTLON
-    # # =========================
+    # =========================
+    # PIPA BESTLON
+    # =========================
+
     if "PIPA BESTLON" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="PIPA BESTLON", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="PIPA BESTLON",
+            header=None
+        )
 
         master["pipa_bestlon"] = load_pipa_bestlon(df)
 
-    # # =========================
-    # # UNNU
-    # # =========================
+    # =========================
+    # UNNU
+    # =========================
+
     if "UNNU" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="UNNU", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="UNNU",
+            header=None
+        )
 
         master["unnu"] = load_unnu(df)
 
-    # # =========================
-    # # TRILLIUNWARE
-    # # =========================
+    # =========================
+    # TRILLIUNWARE
+    # =========================
+
     if "TRILLIUNWARE" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="TRILLIUNWARE", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="TRILLIUNWARE",
+            header=None
+        )
 
         master["trilliunware"] = load_trilliunware(df)
 
-    # # =========================
-    # # FITTING BASIC
-    # # =========================
+    # =========================
+    # FITTING BASIC
+    # =========================
+
     if "FITTING BASIC" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="FITTING BASIC", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="FITTING BASIC",
+            header=None
+        )
 
         master["fitting_basic"] = load_fitting_basic(df)
 
-    # # =========================
-    # # FITTING PUREFLO
-    # # =========================
+    # =========================
+    # FITTING PUREFLO
+    # =========================
+
     if "FITTING PUREFLO" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="FITTING PUREFLO", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="FITTING PUREFLO",
+            header=None
+        )
 
         master["pureflo_fitting"] = load_pureflo_fitting(df)
 
     # =========================
     # PINTU
     # =========================
+
     if "PINTU" in excel.sheet_names:
 
-        df = pd.read_excel(excel, sheet_name="PINTU", header=None)
+        df = pd.read_excel(
+            excel,
+            sheet_name="PINTU",
+            header=None
+        )
 
         master["pintu"] = load_pintu(df)
 
-        # =========================
+    # =========================
     # STEEL
     # =========================
+
     if "STEEL" in excel.sheet_names:
 
         df = pd.read_excel(
@@ -127,5 +174,33 @@ def load_master(file):
         )
 
         master["steel"] = load_steel(df)
+
+    # =========================
+    # CAMPUR
+    # =========================
+
+    if "CAMPUR" in excel.sheet_names:
+
+        df = pd.read_excel(
+            excel,
+            sheet_name="CAMPUR",
+            header=None
+        )
+
+        master["campur"] = load_campur(df)
+
+    # =========================
+    # AKSESORIS WARE
+    # =========================
+
+    if "AKSESORIS WARE" in excel.sheet_names:
+
+        df = pd.read_excel(
+            excel,
+            sheet_name="AKSESORIS WARE",
+            header=None
+        )
+
+        master["accsware"] = load_accsware(df)
 
     return master
